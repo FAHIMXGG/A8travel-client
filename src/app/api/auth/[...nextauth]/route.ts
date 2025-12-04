@@ -76,6 +76,8 @@ export const authOptions: NextAuthOptions = {
           role: rawUser.role ?? "USER",
           phone: rawUser.phone ?? null,
           isApproved: rawUser.isApproved ?? true,
+          subscriptionStatus: rawUser.subscriptionStatus ?? "NONE",
+          subscriptionExpiresAt: rawUser.subscriptionExpiresAt ?? null,
           accessToken,
         };
       },
@@ -92,6 +94,8 @@ export const authOptions: NextAuthOptions = {
         token.role = u.role;
         token.phone = u.phone;
         token.isApproved = u.isApproved;
+        token.subscriptionStatus = u.subscriptionStatus ?? "NONE";
+        token.subscriptionExpiresAt = u.subscriptionExpiresAt ?? null;
         token.accessToken = u.accessToken;
       }
       return token;
@@ -105,6 +109,8 @@ export const authOptions: NextAuthOptions = {
         role: token.role as any,
         phone: token.phone as any,
         isApproved: token.isApproved as any,
+        subscriptionStatus: token.subscriptionStatus as any,
+        subscriptionExpiresAt: token.subscriptionExpiresAt as any,
       };
 
       (session as any).accessToken = token.accessToken;
