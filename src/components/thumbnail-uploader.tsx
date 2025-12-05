@@ -12,6 +12,7 @@ type Props = {
   maxSizeMB?: number;
   accept?: string;
   helperText?: string;
+  endpoint?: "thumbnail" | "profileImage";
 };
 
 export default function ThumbnailUploader({
@@ -20,10 +21,11 @@ export default function ThumbnailUploader({
   maxSizeMB = 4,
   accept = "image/png,image/jpeg,image/webp,image/gif,image/*",
   helperText = "Recommended: 16:9 image, up to 4 MB (PNG/JPG/WebP).",
+  endpoint = "thumbnail",
 }: Props) {
   const [preview, setPreview] = React.useState<string | null>(value ?? null);
   const [error, setError] = React.useState<string | null>(null);
-  const { startUpload, isUploading } = useUploadThing("thumbnail");
+  const { startUpload, isUploading } = useUploadThing(endpoint);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   // Debounce guard to avoid double .click() in some browsers

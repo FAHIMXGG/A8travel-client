@@ -13,6 +13,9 @@ import {
   CalendarPlus,
   UserRoundCheck,
   X,
+  UserCog,
+  KeyRound,
+  UserCircle,
 } from "lucide-react"
 import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
@@ -32,17 +35,29 @@ const commonItems: NavItem[] = [
     icon: LayoutDashboard,
     description: "Dashboard overview",
   },
+  // {
+  //   href: "/dashboard/blogs",
+  //   label: "All Posts",
+  //   icon: FileText,
+  //   description: "View all blog posts",
+  // },
+  // {
+  //   href: "/dashboard/blogs/new",
+  //   label: "Create Post",
+  //   icon: PenSquare,
+  //   description: "Write a new post",
+  // },
   {
-    href: "/dashboard/blogs",
-    label: "All Posts",
-    icon: FileText,
-    description: "View all blog posts",
+    href: "/dashboard/profile",
+    label: "Update Profile",
+    icon: UserCog,
+    description: "Edit your account details",
   },
   {
-    href: "/dashboard/blogs/new",
-    label: "Create Post",
-    icon: PenSquare,
-    description: "Write a new post",
+    href: "/dashboard/password",
+    label: "Update Password",
+    icon: KeyRound,
+    description: "Change your password",
   },
 ]
 
@@ -56,6 +71,12 @@ const adminOnlyItems: NavItem[] = [
 ]
 
 const userOnlyItems: NavItem[] = [
+  {
+    href: "/dashboard/profile/view",
+    label: "View My Profile",
+    icon: UserCircle,
+    description: "View your complete profile",
+  },
   {
     href: "/dashboard/events/host",
     label: "Host Event",

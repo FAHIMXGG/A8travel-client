@@ -10,6 +10,14 @@ export const ourFileRouter = {
       // file.ufsUrl is the canonical field in v7 docs
       return { url: file.ufsUrl || file.url };
     }),
+  profileImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+    .onUploadComplete(async ({ file }) => {
+      return { url: file.ufsUrl || file.url };
+    }),
+  gallery: f({ image: { maxFileSize: "4MB", maxFileCount: 10 } })
+    .onUploadComplete(async ({ file }) => {
+      return { url: file.ufsUrl || file.url };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

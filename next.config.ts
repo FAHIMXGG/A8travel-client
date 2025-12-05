@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**.ufs.sh", pathname: "/**" },
       { protocol: "https", hostname: "utfs.io", pathname: "/**" },
       { protocol: "https", hostname: "cdn-icons-png.flaticon.com", pathname: "/**" },
+      { protocol: "https", hostname: "example.com", pathname: "/**" },
     ],
     // Optional: disable all optimization in dev (helps avoid timeouts locally)
     // unoptimized: process.env.NODE_ENV !== "production",
