@@ -17,6 +17,7 @@ import {
   UserCog,
   KeyRound,
   UserCircle,
+  CalendarCheck,
 } from "lucide-react"
 import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
@@ -83,6 +84,12 @@ const userOnlyItems: NavItem[] = [
     label: "Host Event",
     icon: CalendarPlus,
     description: "Create your next travel meetup",
+  },
+  {
+    href: "/dashboard/events/manage",
+    label: "Manage Travel",
+    icon: CalendarCheck,
+    description: "Manage your hosted travel plans",
   },
   {
     href: "/dashboard/subscription",

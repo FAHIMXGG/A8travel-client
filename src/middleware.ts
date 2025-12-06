@@ -9,7 +9,7 @@ const role = token?.role
 const allowedRoles = new Set(["ADMIN", "USER"])
 const pathname = req.nextUrl.pathname
 const adminOnlySegments = ["/dashboard/users"]
-const userOnlySegments = ["/dashboard/events/host", "/dashboard/profile/view"]
+const userOnlySegments = ["/dashboard/events/host", "/dashboard/events/manage", "/dashboard/profile/view"]
 
 if (!role || !allowedRoles.has(role)) {
 return NextResponse.redirect(new URL("/login", req.url))
