@@ -85,7 +85,8 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      // Initial sign in
       if (user) {
         const u = user as any;
         token.id = u.id;
@@ -98,6 +99,84 @@ export const authOptions: NextAuthOptions = {
         token.subscriptionExpiresAt = u.subscriptionExpiresAt ?? null;
         token.accessToken = u.accessToken;
       }
+      
+      // Handle session update trigger (e.g., after subscription update)
+      if (trigger === "update" && session) {
+        const updated = session as any;
+        
+        // Update subscription-related fields
+        if (updated.subscriptionStatus !== undefined) {
+          token.subscriptionStatus = updated.subscriptionStatus;
+        }
+        if (updated.subscriptionExpiresAt !== undefined) {
+          token.subscriptionExpiresAt = updated.subscriptionExpiresAt;
+        }
+        
+        // Update other user fields if provided
+        if (updated.name !== undefined) {
+          token.name = updated.name;
+        }
+        if (updated.phone !== undefined) {
+          token.phone = updated.phone;
+        }
+        if (updated.isApproved !== undefined) {
+          token.isApproved = updated.isApproved;
+        }
+        
+        // If nested user object is provided, use it
+        if (updated.user) {
+          const u = updated.user as any;
+          if (u.subscriptionStatus !== undefined) token.subscriptionStatus = u.subscriptionStatus;
+          if (u.subscriptionExpiresAt !== undefined) token.subscriptionExpiresAt = u.subscriptionExpiresAt;
+          if (u.name !== undefined) token.name = u.name;
+          if (u.phone !== undefined) token.phone = u.phone;
+          if (u.isApproved !== undefined) token.isApproved = u.isApproved;
+        }
+        
+        // If refreshFromBackend flag is set, fetch fresh data from backend
+        if (updated.refreshFromBackend && token.accessToken) {
+          try {
+            const backendRes = await fetch(`${BACKEND_URL}/api/users/me`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token.accessToken}`,
+              },
+            });
+            
+            if (backendRes.ok) {
+              const backendData = await backendRes.json();
+              
+              // Handle different response formats: data.success.data, data.data, data, or just the user object
+              const userData = 
+                backendData?.data?.data ??
+                backendData?.success?.data ??
+                backendData?.data ??
+                backendData?.success ??
+                backendData;
+              
+              if (userData && typeof userData === 'object') {
+                console.log("Refreshing JWT token with backend data:", {
+                  subscriptionStatus: userData.subscriptionStatus,
+                  subscriptionExpiresAt: userData.subscriptionExpiresAt,
+                });
+                
+                if (userData.subscriptionStatus !== undefined) {
+                  token.subscriptionStatus = userData.subscriptionStatus || "NONE";
+                }
+                if (userData.subscriptionExpiresAt !== undefined) {
+                  token.subscriptionExpiresAt = userData.subscriptionExpiresAt || null;
+                }
+                if (userData.name) token.name = userData.name;
+                if (userData.phone !== undefined) token.phone = userData.phone;
+                if (userData.isApproved !== undefined) token.isApproved = userData.isApproved;
+              }
+            }
+          } catch (err) {
+            console.error("Failed to refresh user data from backend:", err);
+          }
+        }
+      }
+      
       return token;
     },
 

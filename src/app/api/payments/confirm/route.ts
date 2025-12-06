@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
-import { authOptions } from "../auth/[...nextauth]/route"
+import { authOptions } from "../../auth/[...nextauth]/route"
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000"
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const token = (session as any).accessToken
 
-    const res = await fetch(`${BACKEND_URL}/api/travel-plans`, {
+    const res = await fetch(`${BACKEND_URL}/api/payments/confirm`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     const data = await res.json()
     if (!res.ok) {
       return NextResponse.json(
-        { success: false, message: data?.message || "Failed to create travel plan" },
+        { success: false, message: data?.message || "Failed to confirm payment" },
         { status: res.status }
       )
     }

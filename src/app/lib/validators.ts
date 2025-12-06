@@ -44,7 +44,7 @@ export const travelPlanSchema = z
     budgetMin: z.number().min(0, "Minimum budget must be 0 or greater"),
     budgetMax: z.number().min(0, "Maximum budget must be 0 or greater"),
     travelType: z.enum(["FRIENDS", "FAMILY", "SOLO", "COUPLES", "BUSINESS"], {
-      errorMap: () => ({ message: "Please select a valid travel type" }),
+      message: "Please select a valid travel type",
     }),
     description: z.string().min(10, "Description must be at least 10 characters"),
     groupChatLink: z
@@ -73,4 +73,4 @@ export type RegisterData = z.output<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type ProfileUpdateInput = z.infer<typeof profileUpdateSchema>;
 export type PasswordUpdateInput = z.infer<typeof passwordUpdateSchema>;
-export type TravelPlanInput = z.infer<typeof travelPlanSchema>;
+export type TravelPlanInput = z.input<typeof travelPlanSchema>;

@@ -11,6 +11,7 @@ import {
   Loader2,
   Users,
   CalendarPlus,
+  Crown,
   UserRoundCheck,
   X,
   UserCog,
@@ -82,6 +83,12 @@ const userOnlyItems: NavItem[] = [
     label: "Host Event",
     icon: CalendarPlus,
     description: "Create your next travel meetup",
+  },
+  {
+    href: "/dashboard/subscription",
+    label: "Subscription",
+    icon: Crown,
+    description: "Manage your premium plan",
   },
 ]
 
