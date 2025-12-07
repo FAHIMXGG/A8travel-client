@@ -22,6 +22,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/travelplan", label: "Travel Plans" },
   { href: "/FindTravelBuddy", label: "Find Travel Buddy" },
+  { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
 ]
 

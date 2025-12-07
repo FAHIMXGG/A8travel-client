@@ -277,7 +277,7 @@ export default function TravelPlanDetailPage() {
     }
   }
 
-  const handleEditReview = (review: TravelPlan["reviews"][0]) => {
+  const handleEditReview = (review: NonNullable<TravelPlan["reviews"]>[number]) => {
     if (!review) return
     setEditingReviewId(review.id)
     setReviewRating(review.rating)

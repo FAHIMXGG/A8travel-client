@@ -1,3 +1,5 @@
+import { compat } from "@eslint/eslintrc";
+
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
@@ -13,3 +15,5 @@ const eslintConfig = [
     },
   },
 ];
+
+export default eslintConfig;
