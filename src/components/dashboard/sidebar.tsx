@@ -18,6 +18,9 @@ import {
   KeyRound,
   UserCircle,
   CalendarCheck,
+  History,
+  UserPlus,
+  Globe,
 } from "lucide-react"
 import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
@@ -70,6 +73,12 @@ const adminOnlyItems: NavItem[] = [
     icon: Users,
     description: "Manage every traveler profile",
   },
+  {
+    href: "/dashboard/travel-plans",
+    label: "All Travel Plans",
+    icon: Globe,
+    description: "Manage all travel plans",
+  },
 ]
 
 const userOnlyItems: NavItem[] = [
@@ -90,6 +99,18 @@ const userOnlyItems: NavItem[] = [
     label: "Manage Travel",
     icon: CalendarCheck,
     description: "Manage your hosted travel plans",
+  },
+  {
+    href: "/dashboard/travel-history",
+    label: "Travel History",
+    icon: History,
+    description: "View all your joined travel plans",
+  },
+  {
+    href: "/dashboard/joined",
+    label: "Joined",
+    icon: UserPlus,
+    description: "View your active joined plans",
   },
   {
     href: "/dashboard/subscription",

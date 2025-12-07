@@ -9,13 +9,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
-      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
-    }
-
+    // Public endpoint - no auth required
     const { id } = await params
-    const token = (session as any).accessToken
+    const session = await getServerSession(authOptions)
+    const token = (session as any)?.accessToken
 
     const res = await fetch(`${BACKEND_URL}/api/travel-plans/${id}`, {
       method: "GET",
