@@ -177,7 +177,7 @@ export default function PasswordPage() {
                   <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
                     <li>Minimum 6 characters</li>
                     <li>Use a strong, unique password</li>
-                    <li>Don't reuse passwords from other accounts</li>
+                    <li>Don&apos;t reuse passwords from other accounts</li>
                   </ul>
                 </div>
               </div>

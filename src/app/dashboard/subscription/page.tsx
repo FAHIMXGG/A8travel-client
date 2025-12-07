@@ -433,7 +433,7 @@ export default function SubscriptionPage() {
           <div className="space-y-2">
             <h4 className="font-semibold">Do you offer refunds?</h4>
             <p className="text-sm text-muted-foreground">
-              We offer a 30-day money-back guarantee. If you're not satisfied, contact our support team for a full refund.
+              We offer a 30-day money-back guarantee. If you&apos;re not satisfied, contact our support team for a full refund.
             </p>
           </div>
         </CardContent>

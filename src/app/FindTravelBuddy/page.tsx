@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -198,7 +198,7 @@ function Pagination({
   )
 }
 
-export default function FindTravelBuddyPage() {
+function FindTravelBuddyContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [users, setUsers] = useState<User[]>([])
@@ -488,6 +488,39 @@ export default function FindTravelBuddyPage() {
         </Card>
       )}
     </div>
+  )
+}
+
+export default function FindTravelBuddyPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-8 space-y-6">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <Users className="h-8 w-8 text-primary" />
+            Find Travel Buddy
+          </h1>
+          <p className="text-muted-foreground">Search for travel companions and connect with fellow adventurers</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[...Array(6)].map((_, i) => (
+            <Card key={i} className="border-border/50 bg-card/30 backdrop-blur-md">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-16 w-16 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-5 w-32" />
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    }>
+      <FindTravelBuddyContent />
+    </Suspense>
   )
 }
 

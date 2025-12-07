@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
@@ -297,7 +297,7 @@ function Pagination({
   )
 }
 
-export default function TravelHistoryPage() {
+function TravelHistoryPageContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -547,5 +547,23 @@ export default function TravelHistoryPage() {
     </div>
   )
 }
+
+export default function TravelHistoryPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading travel history...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <TravelHistoryPageContent />
+    </Suspense>
+  )
+}
+
 
 

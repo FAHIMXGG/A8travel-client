@@ -65,11 +65,12 @@ export default function GalleryUploader({
   }, [previews, onChange]);
 
   React.useEffect(() => {
+    const objectUrls = objectUrlsRef.current;
     return () => {
-      objectUrlsRef.current.forEach((url) => {
+      objectUrls.forEach((url) => {
         URL.revokeObjectURL(url);
       });
-      objectUrlsRef.current.clear();
+      objectUrls.clear();
     };
   }, []);
 

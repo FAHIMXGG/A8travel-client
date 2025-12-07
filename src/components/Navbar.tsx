@@ -1,10 +1,11 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
 import { useTheme } from "next-themes"
-import { Menu, User, LogOut, LayoutDashboard, Plane, Moon, Sun, UserCircle } from "lucide-react"
+import { Menu, LogOut, LayoutDashboard, Plane, Moon, Sun, UserCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import {
@@ -76,13 +77,11 @@ export default function Navbar() {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [isLoadingProfile, setIsLoadingProfile] = useState(false)
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (session?.user) {
         try {
-          setIsLoadingProfile(true)
           const res = await fetch("/api/profile")
           const data = await res.json()
           
@@ -95,10 +94,8 @@ export default function Navbar() {
               role: data.data.role,
             })
           }
-        } catch (error) {
-          console.error("Failed to fetch user profile:", error)
-        } finally {
-          setIsLoadingProfile(false)
+        } catch {
+          console.error("Failed to fetch user profile")
         }
       }
     }
@@ -111,7 +108,7 @@ export default function Navbar() {
       await signOut({ redirect: false })
       toast.success("Signed out successfully")
       router.push("/")
-    } catch (error) {
+    } catch {
       toast.error("Failed to sign out")
     }
   }
@@ -184,9 +181,11 @@ export default function Navbar() {
                       className="h-9 w-9 rounded-full hover:bg-white/10 backdrop-blur-sm transition-all duration-300 hover:scale-105 overflow-hidden"
                     >
                       {userImage ? (
-                        <img
+                        <Image
                           src={userImage}
                           alt={userName}
+                          width={36}
+                          height={36}
                           className="h-full w-full object-cover"
                         />
                       ) : (
@@ -283,9 +282,11 @@ export default function Navbar() {
                     <>
                       <div className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground bg-white/5 rounded-lg backdrop-blur-sm">
                         {userImage ? (
-                          <img
+                          <Image
                             src={userImage}
                             alt={userName}
+                            width={32}
+                            height={32}
                             className="h-8 w-8 rounded-full object-cover"
                           />
                         ) : (

@@ -23,7 +23,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import toast from "react-hot-toast"
 
 type UserProfile = {
   id: string
@@ -80,6 +79,7 @@ export default function UserProfilePage() {
     if (userId) {
       loadProfile()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
 
   const loadProfile = async () => {

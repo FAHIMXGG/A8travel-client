@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle2, Loader2, XCircle } from "lucide-react"
 import toast from "react-hot-toast"
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { data: session, status, update } = useSession()
@@ -213,7 +213,7 @@ export default function PaymentSuccessPage() {
           {error && (
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground text-center">
-                If you've been charged, please contact support with your payment session ID.
+                If you&apos;ve been charged, please contact support with your payment session ID.
               </p>
               <Button
                 onClick={() => router.push("/dashboard/subscription")}
@@ -227,6 +227,22 @@ export default function PaymentSuccessPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-8">
+        <Card>
+          <CardContent className="flex items-center justify-center min-h-[400px]">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </CardContent>
+        </Card>
+      </div>
+    }>
+      <PaymentSuccessContent />
+    </Suspense>
   )
 }
 

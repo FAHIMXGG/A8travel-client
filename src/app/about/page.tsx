@@ -164,7 +164,7 @@ export default function AboutPage() {
                     <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold">Safety & Trust</h2>
                   </div>
                   <p className="text-muted-foreground max-w-2xl mx-auto">
-                    Your safety and security are our top priorities. We've built multiple layers of protection to ensure
+                    Your safety and security are our top priorities. We&apos;ve built multiple layers of protection to ensure
                     a safe and trustworthy community.
                   </p>
                 </div>
@@ -233,7 +233,7 @@ export default function AboutPage() {
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold">Our Mission</h2>
               </div>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                We're on a mission to make travel more accessible, affordable, and enjoyable for everyone.
+                We&apos;re on a mission to make travel more accessible, affordable, and enjoyable for everyone.
               </p>
             </div>
 

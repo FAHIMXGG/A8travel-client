@@ -240,7 +240,7 @@ export default function EditTravelPlanPage() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-semibold">Travel Plan Not Found</h2>
-          <p className="text-muted-foreground">The travel plan you're trying to edit doesn't exist.</p>
+          <p className="text-muted-foreground">The travel plan you&apos;re trying to edit doesn&apos;t exist.</p>
         </div>
         <Button onClick={() => router.push("/dashboard/events/manage")} variant="outline">
           <ArrowLeft className="h-4 w-4 mr-2" />
