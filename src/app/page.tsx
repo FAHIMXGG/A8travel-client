@@ -499,6 +499,9 @@ const dummyReviews = [
 ];
 
 // --- Page ---
+// Mark page as dynamic since it uses headers()
+export const dynamic = 'force-dynamic';
+
 export default function HomePage() {
   return (
     <div className="min-h-screen relative">
