@@ -3,19 +3,35 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
-import { Menu, User, LogOut, LayoutDashboard, Sparkles } from "lucide-react"
+import { useTheme } from "next-themes"
+import { Menu, User, LogOut, LayoutDashboard, Sparkles, Moon, Sun, UserCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/blog", label: "Blog" },
-  { href: "/projects", label: "Projects" },
+  { href: "/travelplan", label: "Travel Plans" },
+  { href: "/FindTravelBuddy", label: "Find Travel Buddy" },
   { href: "/about", label: "About" },
 ]
+
+type UserProfile = {
+  id: string
+  name: string
+  email: string
+  image: string | null
+  role: string
+}
 
 interface NavItemsProps {
   onClick?: () => void
@@ -55,9 +71,39 @@ function NavItems({ onClick, className }: NavItemsProps) {
 
 export default function Navbar() {
   const { data: session } = useSession()
-  console.log(session)
+  const { theme, setTheme } = useTheme()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+  const [isLoadingProfile, setIsLoadingProfile] = useState(false)
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (session?.user) {
+        try {
+          setIsLoadingProfile(true)
+          const res = await fetch("/api/profile")
+          const data = await res.json()
+          
+          if (res.ok && data?.success && data?.data) {
+            setUserProfile({
+              id: data.data.id,
+              name: data.data.name,
+              email: data.data.email,
+              image: data.data.image,
+              role: data.data.role,
+            })
+          }
+        } catch (error) {
+          console.error("Failed to fetch user profile:", error)
+        } finally {
+          setIsLoadingProfile(false)
+        }
+      }
+    }
+
+    fetchUserProfile()
+  }, [session])
 
   const handleLogout = async () => {
     try {
@@ -68,6 +114,10 @@ export default function Navbar() {
       toast.error("Failed to sign out")
     }
   }
+
+  const userImage = userProfile?.image || null
+  const userName = userProfile?.name || session?.user?.name || "User"
+  const userId = userProfile?.id || session?.user?.id
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
@@ -97,6 +147,18 @@ export default function Navbar() {
 
           {/* Desktop Auth Actions */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Dark Mode Toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="relative h-9 w-9 hover:bg-white/10 backdrop-blur-sm transition-all duration-300 hover:scale-105"
+            >
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+
             {session?.user ? (
               <>
                 {/* Dashboard visible to ANY logged-in user */}
@@ -112,15 +174,51 @@ export default function Navbar() {
                   </Link>
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="gap-2 bg-transparent border-white/20 hover:bg-white/10 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-amber-500/50"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </Button>
+                {/* User Profile Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9 rounded-full hover:bg-white/10 backdrop-blur-sm transition-all duration-300 hover:scale-105 overflow-hidden"
+                    >
+                      {userImage ? (
+                        <img
+                          src={userImage}
+                          alt={userName}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white font-semibold">
+                          {userName.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <div className="px-2 py-1.5">
+                      <p className="text-sm font-medium">{userName}</p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {userProfile?.email || session?.user?.email}
+                      </p>
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href={userId ? `/users/${userId}` : "#"} className="cursor-pointer">
+                        <UserCircle className="mr-2 h-4 w-4" />
+                        View My Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="cursor-pointer text-destructive focus:text-destructive"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             ) : (
               <>
@@ -167,13 +265,37 @@ export default function Navbar() {
 
                 {/* Mobile Auth Actions */}
                 <div className="flex flex-col gap-2 pt-4 border-t border-white/10">
+                  {/* Dark Mode Toggle for Mobile */}
+                  <Button
+                    variant="ghost"
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    className="relative justify-start gap-2 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+                  >
+                    <div className="relative h-4 w-4">
+                      <Sun className="absolute h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                      <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                    </div>
+                    <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+                  </Button>
+
                   {session?.user ? (
                     <>
                       <div className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground bg-white/5 rounded-lg backdrop-blur-sm">
-                        <div className="p-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500">
-                          <User className="h-3 w-3 text-white" />
+                        {userImage ? (
+                          <img
+                            src={userImage}
+                            alt={userName}
+                            className="h-8 w-8 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white font-semibold text-xs">
+                            {userName.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                        <div className="flex flex-col">
+                          <span className="font-medium text-foreground">{userName}</span>
+                          <span className="text-xs truncate">{userProfile?.email || session.user.email}</span>
                         </div>
-                        <span className="truncate">{session.user.email}</span>
                       </div>
 
                       {/* Dashboard visible on mobile for ANY logged-in user */}
@@ -186,6 +308,18 @@ export default function Navbar() {
                         <Link href="/dashboard">
                           <LayoutDashboard className="h-4 w-4" />
                           Dashboard
+                        </Link>
+                      </Button>
+
+                      <Button
+                        asChild
+                        variant="ghost"
+                        className="justify-start gap-2 hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <Link href={userId ? `/users/${userId}` : "#"}>
+                          <UserCircle className="h-4 w-4" />
+                          View My Profile
                         </Link>
                       </Button>
 

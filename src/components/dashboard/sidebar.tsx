@@ -40,30 +40,6 @@ const commonItems: NavItem[] = [
     icon: LayoutDashboard,
     description: "Dashboard overview",
   },
-  // {
-  //   href: "/dashboard/blogs",
-  //   label: "All Posts",
-  //   icon: FileText,
-  //   description: "View all blog posts",
-  // },
-  // {
-  //   href: "/dashboard/blogs/new",
-  //   label: "Create Post",
-  //   icon: PenSquare,
-  //   description: "Write a new post",
-  // },
-  {
-    href: "/dashboard/profile",
-    label: "Update Profile",
-    icon: UserCog,
-    description: "Edit your account details",
-  },
-  {
-    href: "/dashboard/password",
-    label: "Update Password",
-    icon: KeyRound,
-    description: "Change your password",
-  },
 ]
 
 const adminOnlyItems: NavItem[] = [
@@ -79,15 +55,21 @@ const adminOnlyItems: NavItem[] = [
     icon: Globe,
     description: "Manage all travel plans",
   },
+  {
+    href: "/dashboard/profile",
+    label: "Update Profile",
+    icon: UserCog,
+    description: "Edit your account details",
+  },
+  {
+    href: "/dashboard/password",
+    label: "Update Password",
+    icon: KeyRound,
+    description: "Change your password",
+  },
 ]
 
 const userOnlyItems: NavItem[] = [
-  {
-    href: "/dashboard/profile/view",
-    label: "View My Profile",
-    icon: UserCircle,
-    description: "View your complete profile",
-  },
   {
     href: "/dashboard/events/host",
     label: "Host Event",
@@ -101,16 +83,34 @@ const userOnlyItems: NavItem[] = [
     description: "Manage your hosted travel plans",
   },
   {
+    href: "/dashboard/joined",
+    label: "Joined",
+    icon: UserPlus,
+    description: "View your active joined plans",
+  },
+  {
     href: "/dashboard/travel-history",
     label: "Travel History",
     icon: History,
     description: "View all your joined travel plans",
   },
   {
-    href: "/dashboard/joined",
-    label: "Joined",
-    icon: UserPlus,
-    description: "View your active joined plans",
+    href: "/dashboard/profile",
+    label: "Update Profile",
+    icon: UserCog,
+    description: "Edit your account details",
+  },
+  {
+    href: "/dashboard/profile/view",
+    label: "View My Profile",
+    icon: UserCircle,
+    description: "View your complete profile",
+  },
+  {
+    href: "/dashboard/password",
+    label: "Update Password",
+    icon: KeyRound,
+    description: "Change your password",
   },
   {
     href: "/dashboard/subscription",

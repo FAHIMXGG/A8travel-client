@@ -41,6 +41,10 @@ export async function PATCH(req: NextRequest) {
     const body = await req.json()
     const token = (session as any).accessToken
 
+    console.log("Profile update request body:", JSON.stringify(body, null, 2))
+    console.log("Travel interests:", body.travelInterests)
+    console.log("Visited countries:", body.visitedCountries)
+
     const res = await fetch(`${BACKEND_URL}/api/users/${session.user.id}`, {
       method: "PATCH",
       headers: {
@@ -51,12 +55,15 @@ export async function PATCH(req: NextRequest) {
     })
 
     const data = await res.json()
+    console.log("Backend response:", JSON.stringify(data, null, 2))
+    
     if (!res.ok) {
       return NextResponse.json({ success: false, message: data?.message || "Update failed" }, { status: res.status })
     }
 
     return NextResponse.json(data)
   } catch (e: any) {
+    console.error("Profile update error:", e)
     return NextResponse.json({ success: false, message: e.message || "Network error" }, { status: 500 })
   }
 }

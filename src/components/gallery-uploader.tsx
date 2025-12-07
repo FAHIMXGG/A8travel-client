@@ -32,6 +32,7 @@ export default function GalleryUploader({
   const objectUrlsRef = React.useRef<Set<string>>(new Set());
   const isUploadingRef = React.useRef(false);
   const lastSyncedValueRef = React.useRef<string | null>(null);
+  const isInternalUpdateRef = React.useRef(false);
 
   // Only sync with value prop when not uploading and value actually changes externally
   React.useEffect(() => {
@@ -41,9 +42,27 @@ export default function GalleryUploader({
     // On initial mount or when value actually changed externally
     if (lastSyncedValueRef.current === null || currentValueStr !== lastSyncedValueRef.current) {
       lastSyncedValueRef.current = currentValueStr;
+      isInternalUpdateRef.current = true; // Mark as internal sync
       setPreviews(value.map((url, idx) => ({ url, isLocal: false, id: `existing-${idx}-${url}` })));
     }
   }, [value]);
+
+  // Sync previews changes to parent onChange (but not during internal syncs or uploads)
+  React.useEffect(() => {
+    if (isUploadingRef.current || isInternalUpdateRef.current) {
+      isInternalUpdateRef.current = false; // Reset flag
+      return;
+    }
+    
+    const finalUrls = previews.filter((p) => !p.isLocal).map((p) => p.url);
+    const finalUrlsStr = JSON.stringify(finalUrls);
+    
+    // Only call onChange if URLs actually changed
+    if (lastSyncedValueRef.current !== finalUrlsStr) {
+      lastSyncedValueRef.current = finalUrlsStr;
+      onChange(finalUrls);
+    }
+  }, [previews, onChange]);
 
   React.useEffect(() => {
     return () => {
@@ -117,7 +136,7 @@ export default function GalleryUploader({
         throw new Error("Upload failed - no URLs returned");
       }
 
-      // Replace local previews with uploaded URLs and update parent
+      // Replace local previews with uploaded URLs
       setPreviews((prev) => {
         const updated = [...prev];
         newPreviews.forEach((preview, idx) => {
@@ -139,11 +158,6 @@ export default function GalleryUploader({
             }
           }
         });
-        
-        // Update parent with all non-local URLs
-        const finalUrls = updated.filter((p) => !p.isLocal).map((p) => p.url);
-        lastSyncedValueRef.current = JSON.stringify(finalUrls); // Mark as synced
-        onChange(finalUrls);
         
         return updated;
       });
@@ -193,11 +207,7 @@ export default function GalleryUploader({
         URL.revokeObjectURL(preview.url);
         objectUrlsRef.current.delete(preview.url);
       }
-      const updated = prev.filter((_, i) => i !== index);
-      const finalUrls = updated.filter((p) => !p.isLocal).map((p) => p.url);
-      lastSyncedValueRef.current = JSON.stringify(finalUrls); // Mark as synced
-      onChange(finalUrls);
-      return updated;
+      return prev.filter((_, i) => i !== index);
     });
   };
 

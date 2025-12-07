@@ -31,11 +31,19 @@ export function TagInput({ value = [], onChange, placeholder = "Add tag...", max
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
+      e.stopPropagation();
       if (inputValue.trim()) {
         addTag(inputValue);
       }
     } else if (e.key === "Backspace" && !inputValue && value.length > 0) {
       removeTag(value[value.length - 1]);
+    }
+  };
+
+  const handleBlur = () => {
+    // Add tag when user clicks away if there's text
+    if (inputValue.trim()) {
+      addTag(inputValue);
     }
   };
 
@@ -59,16 +67,15 @@ export function TagInput({ value = [], onChange, placeholder = "Add tag...", max
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
+          onBlur={handleBlur}
           placeholder={value.length >= maxTags ? `Maximum ${maxTags} tags` : placeholder}
           className="flex-1 min-w-[120px] border-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-auto p-0 bg-transparent"
           disabled={value.length >= maxTags}
         />
       </div>
-      {value.length > 0 && (
-        <p className="text-xs text-muted-foreground">
-          {value.length}/{maxTags} tags • Press Enter or comma to add
-        </p>
-      )}
+      <p className="text-xs text-muted-foreground">
+        {value.length > 0 ? `${value.length}/${maxTags} tags • ` : ""}Press Enter or comma to add
+      </p>
     </div>
   );
 }

@@ -13,14 +13,100 @@ export const loginSchema = z.object({
 });
 
 export const profileUpdateSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").optional(),
-  phone: z.string().optional().nullable(),
-  image: z.string().url("Invalid image URL").optional().nullable(),
-  bio: z.string().max(1000, "Bio must be less than 1000 characters").optional().nullable(),
+  name: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val || val.trim() === "") return true; // Allow empty for optional field
+        return val.length >= 2;
+      },
+      {
+        message: "Name must be at least 2 characters",
+      }
+    )
+    .refine(
+      (val) => {
+        if (!val || val.trim() === "") return true;
+        return val.length <= 100;
+      },
+      {
+        message: "Name must be less than 100 characters",
+      }
+    ),
+  phone: z
+    .string()
+    .nullish()
+    .superRefine((val, ctx) => {
+      if (!val || val.trim() === "") return; // Allow empty/null
+      
+      // Remove common formatting
+      const cleaned = val.replace(/[\s\-\(\)]/g, "");
+      
+      // E.164 format: +[country code][number] (7-15 digits after +)
+      const phoneRegex = /^\+[1-9]\d{6,14}$/;
+      if (!phoneRegex.test(cleaned)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Phone number must be in international format (e.g., +1234567890 or +8801700000000)",
+        });
+      }
+    }),
+  image: z
+    .string()
+    .nullable()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val || val.trim() === "") return true; // Allow empty/null
+        try {
+          new URL(val);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      {
+        message: "Image must be a valid URL",
+      }
+    ),
+  bio: z
+    .string()
+    .nullable()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true; // Allow null/empty
+        if (val.length > 1000) return false;
+        return true;
+      },
+      {
+        message: "Bio must be less than 1000 characters",
+      }
+    ),
   travelInterests: z.array(z.string()).optional(),
   visitedCountries: z.array(z.string()).optional(),
-  currentLocation: z.string().max(200, "Location must be less than 200 characters").optional().nullable(),
-  gallery: z.array(z.string().url("Invalid gallery image URL")).optional(),
+  currentLocation: z.string().min(1, "Current location is required"),
+  gallery: z
+    .array(
+      z
+        .string()
+        .refine(
+          (val) => {
+            try {
+              new URL(val);
+              return true;
+            } catch {
+              return false;
+            }
+          },
+          {
+            message: "Gallery image must be a valid URL",
+          }
+        )
+    )
+    .max(10, "Maximum 10 gallery images allowed")
+    .optional(),
 });
 
 export const passwordUpdateSchema = z
