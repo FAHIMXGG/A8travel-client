@@ -2,16 +2,26 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { loginSchema, type LoginInput } from "@/app/lib/validators";
+import { loginSchema, type LoginInput, forgotPasswordSchema, resetPasswordSchema, type ForgotPasswordInput, type ResetPasswordInput } from "@/app/lib/validators";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { OTPInput } from "@/components/ui/otp-input";
+import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+  const [forgotPasswordStep, setForgotPasswordStep] = useState<"email" | "reset">("email");
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [otpValue, setOtpValue] = useState("");
 
   const {
     register,
@@ -20,6 +30,28 @@ export default function LoginPage() {
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
   });
+
+  const {
+    register: registerForgotPassword,
+    handleSubmit: handleSubmitForgotPassword,
+    formState: { errors: forgotPasswordErrors, isSubmitting: isSubmittingForgotPassword },
+  } = useForm<ForgotPasswordInput>({
+    resolver: zodResolver(forgotPasswordSchema),
+  });
+
+  const {
+    register: registerResetPassword,
+    handleSubmit: handleSubmitResetPassword,
+    formState: { errors: resetPasswordErrors, isSubmitting: isSubmittingResetPassword },
+    setValue: setResetPasswordValue,
+  } = useForm<ResetPasswordInput>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      email: "",
+      otp: "",
+    },
+  });
+
 
   const onSubmit = async (values: LoginInput) => {
     try {
@@ -35,6 +67,56 @@ export default function LoginPage() {
         router.push("/");
       } else {
         toast.error("Invalid credentials");
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Something went wrong");
+    }
+  };
+
+  const onForgotPasswordSubmit = async (values: ForgotPasswordInput) => {
+    try {
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: values.email }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setForgotPasswordEmail(values.email);
+        setResetPasswordValue("email", values.email);
+        setOtpValue("");
+        setResetPasswordValue("otp", "");
+        setForgotPasswordStep("reset");
+        toast.success("OTP sent to your email");
+      } else {
+        toast.error(data?.message || "Failed to send OTP");
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Something went wrong");
+    }
+  };
+
+  const onResetPasswordSubmit = async (values: ResetPasswordInput) => {
+    try {
+      const res = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: forgotPasswordEmail || values.email,
+          otp: values.otp,
+          newPassword: values.newPassword,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("Password reset successfully");
+        setForgotPasswordOpen(false);
+        setForgotPasswordStep("email");
+        setForgotPasswordEmail("");
+      } else {
+        toast.error(data?.message || "Failed to reset password");
       }
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
@@ -87,12 +169,21 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-1.5 sm:space-y-2">
-                <Label
-                  htmlFor="password"
-                  className="text-xs sm:text-sm font-medium"
-                >
-                  Password
-                </Label>
+                <div className="flex items-center justify-between">
+                  <Label
+                    htmlFor="password"
+                    className="text-xs sm:text-sm font-medium"
+                  >
+                    Password
+                  </Label>
+                  <button
+                    type="button"
+                    onClick={() => setForgotPasswordOpen(true)}
+                    className="text-xs text-primary hover:underline underline-offset-4 transition-colors"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
                 <Input
                   id="password"
                   type="password"
@@ -135,6 +226,188 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={forgotPasswordOpen}
+        onOpenChange={(open) => {
+          setForgotPasswordOpen(open);
+          if (!open) {
+            setForgotPasswordStep("email");
+            setForgotPasswordEmail("");
+            setOtpValue("");
+            setShowNewPassword(false);
+            setShowConfirmPassword(false);
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {forgotPasswordStep === "email" ? "Forgot Password" : "Reset Password"}
+            </DialogTitle>
+            <DialogDescription>
+              {forgotPasswordStep === "email"
+                ? "Enter your email address and we'll send you an OTP to reset your password."
+                : "Enter the OTP sent to your email and your new password."}
+            </DialogDescription>
+          </DialogHeader>
+
+          {forgotPasswordStep === "email" ? (
+            <form
+              onSubmit={handleSubmitForgotPassword(onForgotPasswordSubmit)}
+              className="space-y-4"
+            >
+              <div className="space-y-2">
+                <Label htmlFor="forgot-email" className="text-sm font-medium">
+                  Email
+                </Label>
+                <Input
+                  id="forgot-email"
+                  type="email"
+                  placeholder="you@example.com"
+                  className="h-10 text-sm"
+                  {...registerForgotPassword("email")}
+                />
+                {forgotPasswordErrors.email && (
+                  <p className="text-xs text-destructive font-medium mt-1">
+                    {forgotPasswordErrors.email.message}
+                  </p>
+                )}
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isSubmittingForgotPassword}
+                className="w-full"
+              >
+                {isSubmittingForgotPassword ? (
+                  <span className="flex items-center gap-2">
+                    <span className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                    Sending...
+                  </span>
+                ) : (
+                  "Send OTP"
+                )}
+              </Button>
+            </form>
+          ) : (
+            <form
+              onSubmit={handleSubmitResetPassword(onResetPasswordSubmit)}
+              className="space-y-4"
+            >
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-center block">
+                  Enter OTP
+                </Label>
+                <OTPInput
+                  value={otpValue}
+                  onChange={(value) => {
+                    setOtpValue(value);
+                    setResetPasswordValue("otp", value);
+                  }}
+                  length={6}
+                  error={!!resetPasswordErrors.otp}
+                />
+                {resetPasswordErrors.otp && (
+                  <p className="text-xs text-destructive font-medium mt-1 text-center">
+                    {resetPasswordErrors.otp.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="reset-password" className="text-sm font-medium">
+                  New Password
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="reset-password"
+                    type={showNewPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    className="h-10 text-sm pr-10"
+                    {...registerResetPassword("newPassword")}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {showNewPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {resetPasswordErrors.newPassword && (
+                  <p className="text-xs text-destructive font-medium mt-1">
+                    {resetPasswordErrors.newPassword.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="reset-confirm-password" className="text-sm font-medium">
+                  Confirm Password
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="reset-confirm-password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    className="h-10 text-sm pr-10"
+                    {...registerResetPassword("confirmPassword")}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {resetPasswordErrors.confirmPassword && (
+                  <p className="text-xs text-destructive font-medium mt-1">
+                    {resetPasswordErrors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setForgotPasswordStep("email");
+                    setForgotPasswordEmail("");
+                  }}
+                  className="flex-1"
+                >
+                  Back
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isSubmittingResetPassword}
+                  className="flex-1"
+                >
+                  {isSubmittingResetPassword ? (
+                    <span className="flex items-center gap-2">
+                      <span className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                      Resetting...
+                    </span>
+                  ) : (
+                    "Reset Password"
+                  )}
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
