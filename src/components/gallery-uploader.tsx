@@ -121,6 +121,10 @@ export default function GalleryUploader({
       const res = await startUpload(validFiles);
       
       // Extract URLs from uploadthing response - matching thumbnail uploader pattern
+      if (!res) {
+        throw new Error("Upload failed - no response returned");
+      }
+      
       const uploadedUrls = res
         .map((r: any) => {
           // Match the pattern used in thumbnail uploader: serverData.url or url
