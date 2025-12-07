@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
 import { useTheme } from "next-themes"
-import { Menu, User, LogOut, LayoutDashboard, Sparkles, Moon, Sun, UserCircle } from "lucide-react"
+import { Menu, User, LogOut, LayoutDashboard, Plane, Moon, Sun, UserCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import {
@@ -133,10 +133,10 @@ export default function Navbar() {
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
-                <Sparkles className="h-5 w-5 text-amber-500 relative" />
+                <Plane className="h-5 w-5 text-amber-500 relative" />
               </div>
               <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
-                Portify
+                TravelBuddy
               </span>
             </Link>
 
