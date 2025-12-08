@@ -5,7 +5,6 @@ import { useRouter, useParams } from "next/navigation"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {
   Calendar,
@@ -26,7 +25,6 @@ import {
   Trash2,
   Edit2,
   Send,
-  X,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -192,6 +190,7 @@ export default function TravelPlanDetailPage() {
     if (planId) {
       loadPlan()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planId])
 
   const loadPlan = async () => {

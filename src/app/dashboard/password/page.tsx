@@ -22,7 +22,7 @@ import { KeyRound, Lock, Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 
 export default function PasswordPage() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const router = useRouter()
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)

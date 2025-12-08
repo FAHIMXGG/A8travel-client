@@ -23,12 +23,6 @@ import {
   ChevronsRight,
   Globe,
   User,
-  DollarSign,
-  Tag,
-  Phone,
-  Link as LinkIcon,
-  FileText,
-  AlertCircle,
 } from "lucide-react"
 import toast from "react-hot-toast"
 import {

@@ -1,6 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Eye, Calendar, Tag, ChevronLeft, ChevronRight, Star, Plane, MapPin, Users } from "lucide-react";
+import { Eye, Calendar, Tag, ChevronLeft, ChevronRight, Star, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // Page metadata
@@ -8,10 +7,6 @@ export const metadata = {
   title: "Travel Blog - TravelBuddy",
   description: "Travel tips, guides, and stories from our community",
 };
-
-// Tiny inline blur placeholder for images
-const TINY_BLUR =
-  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iOSIgdmlld0JveD0iMCAwIDE2IDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjkiIGZpbGw9IiNmMmYyZjIiLz48L3N2Zz4=";
 
 // Format date consistently for SSR/CSR
 function formatDate(iso?: string) {
@@ -210,8 +205,7 @@ export default async function BlogPage({
               </div>
             ) : (
               <div className="grid gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" suppressHydrationWarning>
-                {posts.map((post, idx) => {
-                  const isAboveFold = page === 1 && idx < 3;
+                {posts.map((post) => {
 
                   return (
                     <Link

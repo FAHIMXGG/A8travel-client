@@ -20,7 +20,6 @@ import toast from "react-hot-toast"
 import { useRouter, useParams } from "next/navigation"
 import {
   Calendar,
-  MapPin,
   DollarSign,
   Users,
   ImageIcon,
@@ -66,7 +65,7 @@ type TravelPlan = {
 }
 
 export default function EditTravelPlanPage() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const router = useRouter()
   const params = useParams()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -114,6 +113,7 @@ export default function EditTravelPlanPage() {
     if (status === "authenticated" && planId) {
       loadPlan()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, planId])
 
   const loadPlan = async () => {

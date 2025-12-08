@@ -285,7 +285,7 @@ function Pagination({
 }
 
 function JoinedPageContent() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
   const [travelPlans, setTravelPlans] = useState<TravelPlan[]>([])

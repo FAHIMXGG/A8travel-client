@@ -401,7 +401,7 @@ function FindTravelBuddyContent() {
             </div>
           </div>
           <p className="text-xs text-muted-foreground">
-            Tip: Separate multiple values with commas (e.g., "Adventure,Beach" or "France,Italy")
+            Tip: Separate multiple values with commas (e.g., &quot;Adventure,Beach&quot; or &quot;France,Italy&quot;)
           </p>
         </CardContent>
       </Card>

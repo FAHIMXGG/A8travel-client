@@ -20,10 +20,8 @@ import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import {
   Calendar,
-  MapPin,
   DollarSign,
   Users,
-  Globe,
   ImageIcon,
   Tag,
   Link as LinkIcon,
@@ -46,7 +44,7 @@ const TRAVEL_TYPES = [
 ] as const
 
 export default function HostEventPage() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
 

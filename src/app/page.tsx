@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { headers } from "next/headers";
-import { ArrowRight, Sparkles, TrendingUp, Clock, Eye, Calendar, MapPin, Users, DollarSign, Star, Plane, Globe, Heart, Shield, Zap } from "lucide-react";
+import { ArrowRight, Sparkles, Clock, Calendar, MapPin, Users, DollarSign, Star, Plane, Globe, Shield, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -162,17 +162,6 @@ function TravellersSkeleton() {
   );
 }
 
-function formatDate(iso?: string) {
-  if (!iso) return "—";
-  const d = new Date(iso);
-  if (Number.isNaN(d.valueOf())) return "—";
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
 function formatDateRange(start?: string, end?: string) {
   if (!start || !end) return "—";
   const startDate = new Date(start);
@@ -180,13 +169,6 @@ function formatDateRange(start?: string, end?: string) {
   if (Number.isNaN(startDate.valueOf()) || Number.isNaN(endDate.valueOf())) return "—";
   return `${startDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${endDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
 }
-
-const TRAVEL_TYPES: Record<string, string> = {
-  FRIENDS: "Friends",
-  FAMILY: "Family",
-  SOLO: "Solo",
-  BUSINESS: "Business",
-};
 
 const STATUS_COLORS: Record<string, string> = {
   OPEN: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20",

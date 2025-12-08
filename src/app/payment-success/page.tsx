@@ -11,7 +11,7 @@ import toast from "react-hot-toast"
 function PaymentSuccessContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { data: session, status, update } = useSession()
+  const { status, update } = useSession()
   const [isConfirming, setIsConfirming] = useState(true)
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [error, setError] = useState<string | null>(null)

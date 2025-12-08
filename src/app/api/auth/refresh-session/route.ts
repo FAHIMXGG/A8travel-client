@@ -4,7 +4,8 @@ import { authOptions } from "../[...nextauth]/route"
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000"
 
-export async function POST(req: NextRequest) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function POST(_req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {

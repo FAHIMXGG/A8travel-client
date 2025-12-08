@@ -14,7 +14,6 @@ import {
   Link as LinkIcon,
   Phone,
   FileText,
-  Loader2,
   ArrowLeft,
   Edit,
   CalendarCheck,
@@ -107,6 +106,7 @@ export default function ViewTravelPlanPage() {
     if (status === "authenticated" && planId) {
       loadPlan()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, planId])
 
   const loadPlan = async () => {

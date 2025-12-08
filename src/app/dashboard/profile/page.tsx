@@ -55,7 +55,6 @@ export default function ProfilePage() {
     setValue,
     control,
     reset,
-    watch,
     getValues,
   } = useForm<ProfileUpdateInput>({
     resolver: zodResolver(profileUpdateSchema),
