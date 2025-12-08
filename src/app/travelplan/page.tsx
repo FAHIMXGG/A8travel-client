@@ -10,7 +10,6 @@ import {
   Calendar,
   Users,
   DollarSign,
-  Tag,
   Search,
   Filter,
   X,
@@ -27,13 +26,6 @@ import {
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import toast from "react-hot-toast"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
 type TravelPlan = {
   id: string

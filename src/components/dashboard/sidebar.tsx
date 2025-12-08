@@ -12,7 +12,6 @@ import {
   CalendarPlus,
   Crown,
   UserRoundCheck,
-  X,
   UserCog,
   KeyRound,
   UserCircle,
