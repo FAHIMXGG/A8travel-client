@@ -1,11 +1,46 @@
 
 import { z } from "zod";
 
-export const registerSchema = z.object({
-  name: z.string().min(2, "Name is required"),
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(6, "Min 6 characters"),
-});
+export const registerSchema = z
+  .object({
+    name: z.string().min(2, "Name is required"),
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Enter a valid email address")
+      .refine(
+        (email) => {
+          // More strict email validation
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) return false;
+          
+          // Check for valid domain structure
+          const parts = email.split("@");
+          if (parts.length !== 2) return false;
+          
+          const [localPart, domain] = parts;
+          // Local part should not be empty and domain should have at least one dot
+          if (!localPart || localPart.length === 0) return false;
+          if (!domain || !domain.includes(".")) return false;
+          
+          // Domain should have valid TLD (at least 2 characters after last dot)
+          const domainParts = domain.split(".");
+          const tld = domainParts[domainParts.length - 1];
+          if (!tld || tld.length < 2) return false;
+          
+          return true;
+        },
+        {
+          message: "Please enter a valid email address (e.g., user@example.com)",
+        }
+      ),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(6, "Please confirm your password"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 export const loginSchema = z.object({
   email: z.string().email("Invalid email"),
@@ -170,8 +205,9 @@ export const travelPlanSchema = z
 
 // 👇 input = before defaults (role is optional)
 // 👇 output = after defaults (role is required)
+// RegisterData excludes confirmPassword as it's only for validation
 export type RegisterFormValues = z.input<typeof registerSchema>;
-export type RegisterData = z.output<typeof registerSchema>;
+export type RegisterData = Omit<z.output<typeof registerSchema>, "confirmPassword">;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type ProfileUpdateInput = z.infer<typeof profileUpdateSchema>;
 export type PasswordUpdateInput = z.infer<typeof passwordUpdateSchema>;

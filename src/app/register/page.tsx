@@ -6,11 +6,15 @@ import { registerSchema, type RegisterFormValues, type RegisterData } from "@/ap
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Eye, EyeOff } from "lucide-react"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export default function RegisterPage() {
   const router = useRouter()
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const {
     register,
@@ -22,8 +26,15 @@ export default function RegisterPage() {
   })
 
   const onSubmit = async (values: RegisterFormValues) => {
-    const payload: RegisterData = registerSchema.parse(values)
-    console.log(payload)
+    // Parse and validate (including confirmPassword check)
+    const validated = registerSchema.parse(values)
+    
+    // Create payload without confirmPassword
+    const payload: RegisterData = {
+      name: validated.name,
+      email: validated.email,
+      password: validated.password,
+    }
 
     try {
       const res = await fetch("/api/proxy/register", {
@@ -94,19 +105,59 @@ export default function RegisterPage() {
                 <Label htmlFor="password" className="text-xs sm:text-sm font-medium">
                   Password
                 </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  className="h-10 sm:h-11 text-sm sm:text-base bg-white/50 dark:bg-neutral-800/50 backdrop-blur-sm border-neutral-200/50 dark:border-neutral-700/50 focus:border-primary/50 focus:ring-primary/20"
-                  {...register("password")}
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    className="h-10 sm:h-11 text-sm sm:text-base bg-white/50 dark:bg-neutral-800/50 backdrop-blur-sm border-neutral-200/50 dark:border-neutral-700/50 focus:border-primary/50 focus:ring-primary/20 pr-10"
+                    {...register("password")}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
                 {errors.password && (
                   <p className="text-xs text-destructive font-medium mt-1">{errors.password.message}</p>
                 )}
               </div>
 
-
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="confirmPassword" className="text-xs sm:text-sm font-medium">
+                  Confirm Password
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    className="h-10 sm:h-11 text-sm sm:text-base bg-white/50 dark:bg-neutral-800/50 backdrop-blur-sm border-neutral-200/50 dark:border-neutral-700/50 focus:border-primary/50 focus:ring-primary/20 pr-10"
+                    {...register("confirmPassword")}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <p className="text-xs text-destructive font-medium mt-1">{errors.confirmPassword.message}</p>
+                )}
+              </div>
 
               {/* Hidden role field */}
               
