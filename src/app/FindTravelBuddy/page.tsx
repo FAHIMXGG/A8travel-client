@@ -91,11 +91,15 @@ async function fetchAllUsers(params: {
 
 async function searchUsers(params: {
   query?: string
+  travelInterests?: string
+  visitedCountries?: string
   page?: number
   limit?: number
 }): Promise<UsersResponse> {
   const queryParams = new URLSearchParams()
   if (params.query) queryParams.set("query", params.query)
+  if (params.travelInterests) queryParams.set("travelInterests", params.travelInterests)
+  if (params.visitedCountries) queryParams.set("visitedCountries", params.visitedCountries)
   if (params.page) queryParams.set("page", params.page.toString())
   if (params.limit) queryParams.set("limit", params.limit.toString())
 
@@ -205,20 +209,35 @@ function FindTravelBuddyContent() {
   const [meta, setMeta] = useState<Meta>({ page: 1, limit: 12, total: 0, totalPages: 0 })
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState(searchParams.get("query") || "")
+  const [travelInterests, setTravelInterests] = useState(searchParams.get("travelInterests") || "")
+  const [visitedCountries, setVisitedCountries] = useState(searchParams.get("visitedCountries") || "")
 
   const page = Number(searchParams.get("page")) || 1
-  const isSearchMode = !!searchQuery.trim()
-  const limit = isSearchMode ? 10 : 12
+  const isSearchMode = !!(
+    searchQuery.trim() || 
+    travelInterests.trim() || 
+    visitedCountries.trim()
+  )
 
   const loadUsers = useCallback(async () => {
     setLoading(true)
+    const trimmedQuery = searchQuery.trim()
+    const trimmedInterests = travelInterests.trim()
+    const trimmedCountries = visitedCountries.trim()
+    
+    const hasFilters = !!(trimmedQuery || trimmedInterests || trimmedCountries)
+    const currentIsSearchMode = hasFilters
+    const limit = currentIsSearchMode ? 10 : 12
+    
     try {
       let result: UsersResponse
       
-      if (isSearchMode) {
-        // Use search API when query is provided
+      if (currentIsSearchMode) {
+        // Use search API when any filter is provided
         result = await searchUsers({
-          query: searchQuery,
+          query: trimmedQuery || undefined,
+          travelInterests: trimmedInterests || undefined,
+          visitedCountries: trimmedCountries || undefined,
           page,
           limit,
         })
@@ -230,8 +249,14 @@ function FindTravelBuddyContent() {
         })
       }
       
-      setUsers(result.data.data)
-      setMeta(result.data.meta)
+      if (result.success) {
+        setUsers(result.data.data)
+        setMeta(result.data.meta)
+      } else {
+        toast.error(result.message || "Failed to load users")
+        setUsers([])
+        setMeta({ page: 1, limit, total: 0, totalPages: 0 })
+      }
     } catch (error: any) {
       toast.error(error.message || "Failed to load users")
       setUsers([])
@@ -239,7 +264,18 @@ function FindTravelBuddyContent() {
     } finally {
       setLoading(false)
     }
-  }, [searchQuery, page, limit, isSearchMode])
+  }, [searchQuery, travelInterests, visitedCountries, page])
+
+  // Sync state with URL params when they change
+  useEffect(() => {
+    const queryParam = searchParams.get("query") || ""
+    const interestsParam = searchParams.get("travelInterests") || ""
+    const countriesParam = searchParams.get("visitedCountries") || ""
+    
+    setSearchQuery(queryParam)
+    setTravelInterests(interestsParam)
+    setVisitedCountries(countriesParam)
+  }, [searchParams])
 
   useEffect(() => {
     loadUsers()
@@ -247,8 +283,18 @@ function FindTravelBuddyContent() {
 
   const handleSearch = () => {
     const params = new URLSearchParams()
-    if (searchQuery.trim()) {
-      params.set("query", searchQuery.trim())
+    const trimmedQuery = searchQuery.trim()
+    const trimmedInterests = travelInterests.trim()
+    const trimmedCountries = visitedCountries.trim()
+    
+    if (trimmedQuery) {
+      params.set("query", trimmedQuery)
+    }
+    if (trimmedInterests) {
+      params.set("travelInterests", trimmedInterests)
+    }
+    if (trimmedCountries) {
+      params.set("visitedCountries", trimmedCountries)
     }
     params.set("page", "1")
     router.push(`/FindTravelBuddy?${params.toString()}`)
@@ -256,6 +302,8 @@ function FindTravelBuddyContent() {
 
   const handleClearSearch = () => {
     setSearchQuery("")
+    setTravelInterests("")
+    setVisitedCountries("")
     router.push("/FindTravelBuddy?page=1")
   }
 
@@ -293,13 +341,14 @@ function FindTravelBuddyContent() {
 
       {/* Search Bar */}
       <Card className="border-border/50 bg-card/30 backdrop-blur-md">
-        <CardContent className="p-4">
+        <CardContent className="p-4 space-y-4">
+          {/* Main Search */}
           <div className="flex gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Search by name or email..."
+                placeholder="Search users by name, email, location, interests, or anything..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={handleKeyPress}
@@ -311,7 +360,7 @@ function FindTravelBuddyContent() {
                 Clear
               </Button>
             )}
-            <Button onClick={handleSearch} disabled={loading || !searchQuery.trim()}>
+            <Button onClick={handleSearch} disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -320,11 +369,40 @@ function FindTravelBuddyContent() {
               ) : (
                 <>
                   <Search className="h-4 w-4 mr-2" />
-                  Search
+                  {isSearchMode ? "Search" : "Show All"}
                 </>
               )}
             </Button>
           </div>
+
+          {/* Filter Inputs */}
+          <div className="grid gap-2 md:grid-cols-2">
+            <div className="relative">
+              <Heart className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Travel Interests (e.g., Adventure, Beach, Culture)"
+                value={travelInterests}
+                onChange={(e) => setTravelInterests(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="pl-10"
+              />
+            </div>
+            <div className="relative">
+              <Plane className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Visited Countries (e.g., France, Italy, Spain)"
+                value={visitedCountries}
+                onChange={(e) => setVisitedCountries(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="pl-10"
+              />
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Tip: Separate multiple values with commas (e.g., "Adventure,Beach" or "France,Italy")
+          </p>
         </CardContent>
       </Card>
 

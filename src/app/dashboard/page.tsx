@@ -2,12 +2,10 @@
 
 import Link from "next/link"
 import { useSession } from "next-auth/react"
-import { useCallback, useMemo, useState } from "react"
+import { useMemo } from "react"
 import {
   ArrowRight,
-  Check,
   Clock,
-  Copy,
   Crown,
   Mail,
   ShieldCheck,
@@ -52,7 +50,6 @@ const subscriptionConfig = {
 export default function DashboardOverviewPage() {
   const { data: session, status } = useSession()
   const user = session?.user
-  const [copied, setCopied] = useState(false)
 
   const subscriptionStatus = (user?.subscriptionStatus ?? "NONE") as keyof typeof subscriptionConfig
   const subscriptionTheme = subscriptionConfig[subscriptionStatus] ?? subscriptionConfig.NONE
@@ -67,20 +64,6 @@ export default function DashboardOverviewPage() {
       year: "numeric",
     })
   }, [user?.subscriptionExpiresAt])
-
-  const tokenPreview = useMemo(() => {
-    if (!session?.accessToken) return "No token issued yet"
-    const token = session.accessToken
-    if (token.length <= 18) return token
-    return `${token.slice(0, 10)}…${token.slice(-6)}`
-  }, [session?.accessToken])
-
-  const handleCopyToken = useCallback(async () => {
-    if (!session?.accessToken) return
-    await navigator.clipboard.writeText(session.accessToken)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }, [session?.accessToken])
 
   const overviewStats = [
     {
@@ -126,8 +109,8 @@ export default function DashboardOverviewPage() {
             Review your access status, plan details and next actions in one snapshot.
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-[1.4fr_1fr]">
-          <div className="grid gap-4 sm:grid-cols-2">
+        <CardContent>
+          <div className="grid gap-4 sm:grid-cols-3">
             {overviewStats.map((stat) => (
               <div
                 key={stat.label}
@@ -138,24 +121,6 @@ export default function DashboardOverviewPage() {
                 <p className="text-xs text-muted-foreground mt-1">{stat.hint}</p>
               </div>
             ))}
-          </div>
-          <div className="flex flex-col justify-between rounded-2xl border border-border/60 bg-background/80 p-4 shadow-sm">
-            <div className="space-y-1.5">
-              <p className="text-sm font-medium text-muted-foreground">Auth token</p>
-              <p className="font-mono text-sm text-muted-foreground/90">{tokenPreview}</p>
-            </div>
-            <div className="flex items-center gap-2 pt-4">
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full justify-center border-dashed"
-                disabled={!session?.accessToken}
-                onClick={handleCopyToken}
-              >
-                {copied ? <Check className="mr-2 h-4 w-4" /> : <Copy className="mr-2 h-4 w-4" />}
-                {copied ? "Copied" : "Copy token"}
-              </Button>
-            </div>
           </div>
         </CardContent>
         <CardFooter className="relative flex flex-wrap gap-3 text-sm text-muted-foreground">
@@ -228,7 +193,7 @@ export default function DashboardOverviewPage() {
           </CardContent>
           <CardFooter>
             <Button asChild className="w-full">
-              <Link href="/projects">
+              <Link href="/dashboard/subscription">
                 Explore plans
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

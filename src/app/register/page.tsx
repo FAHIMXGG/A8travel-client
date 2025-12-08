@@ -54,7 +54,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 sm:p-6 md:p-8 bg-gradient-to-br from-[#FFFFFF] via-[#FFFFFF] to-[#FFFFFF] dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-800 overflow-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 sm:p-6 md:p-8 bg-gradient-to-br from-[#FFFFFF] via-[#FFFFFF] to-[#FFFFFF] dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-800 overflow-hidden rounded-3xl">
       <div className="w-full max-w-[90%] sm:max-w-md relative">
         {/* Decorative blur elements - hidden on mobile */}
         <div className="hidden sm:block absolute -top-16 -left-16 md:-top-5 md:-left-24 w-32 h-32 md:w-48 md:h-48 bg-primary/20 rounded-full blur-3xl" />

@@ -120,7 +120,7 @@ export default function HostEventPage() {
       }
 
       toast.success("Travel plan created successfully!")
-      router.push("/dashboard/events")
+      router.push("/dashboard/events/manage")
       router.refresh()
     } catch (e: any) {
       toast.error(e.message || "Something went wrong")

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
   ChevronRight,
+  ChevronLeft,
   Loader2,
   Users,
   CalendarPlus,
@@ -149,19 +150,33 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile Menu Button */}
+      {/* Mobile Menu Button - Left Middle */}
       <Button
         variant="outline"
         size="icon"
-        className="fixed top-16 left-5 z-50 lg:hidden backdrop-blur-md bg-background/80 border-border/50"
+        className={cn(
+          "fixed top-1/2 -translate-y-1/2 z-50 lg:hidden",
+          "backdrop-blur-md bg-background/90 border-border/50",
+          "rounded-r-lg rounded-l-none border-l-0",
+          "shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out",
+          "h-12 w-8",
+          isOpen ? "left-72" : "left-0"
+        )}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {isOpen ? <X className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+        {isOpen ? (
+          <ChevronLeft className="h-5 w-5" />
+        ) : (
+          <ChevronRight className="h-5 w-5" />
+        )}
       </Button>
 
       {/* Overlay for mobile */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden" onClick={() => setIsOpen(false)} />
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300" 
+          onClick={() => setIsOpen(false)} 
+        />
       )}
 
       {/* Sidebar */}
@@ -172,9 +187,10 @@ export default function Sidebar() {
           "bg-background/95 lg:bg-background/60 backdrop-blur-xl",
           "border-r lg:border lg:rounded-2xl",
           "border-border/50",
-          "p-6 lg:p-5",
+          "pt-20 pb-6 px-6 lg:pt-5 lg:pb-5 lg:px-5",
           "transition-transform duration-300 ease-in-out",
           "shadow-2xl lg:shadow-none",
+          "overflow-y-auto",
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
           isNavigating && "opacity-75 pointer-events-none",
         )}

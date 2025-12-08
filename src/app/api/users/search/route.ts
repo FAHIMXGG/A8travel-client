@@ -15,12 +15,16 @@ export async function GET(req: NextRequest) {
     const query = searchParams.get("query") || ""
     const page = searchParams.get("page") || "1"
     const limit = searchParams.get("limit") || "10"
+    const travelInterests = searchParams.get("travelInterests") || ""
+    const visitedCountries = searchParams.get("visitedCountries") || ""
 
     // Build query string
     const queryParams = new URLSearchParams()
-    queryParams.set("query", query)
+    if (query) queryParams.set("query", query)
     queryParams.set("page", page)
     queryParams.set("limit", limit)
+    if (travelInterests) queryParams.set("travelInterests", travelInterests)
+    if (visitedCountries) queryParams.set("visitedCountries", visitedCountries)
 
     const token = (session as any).accessToken
 

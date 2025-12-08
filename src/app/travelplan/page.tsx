@@ -305,7 +305,16 @@ function TravelPlansPageContent() {
       }
 
       const result = await fetchTravelPlans(params)
-      setPlans(result.data.data || [])
+      const plansData = result.data.data || []
+      
+      // Sort plans to show OPEN status first
+      const sortedPlans = [...plansData].sort((a, b) => {
+        if (a.status === "OPEN" && b.status !== "OPEN") return -1
+        if (a.status !== "OPEN" && b.status === "OPEN") return 1
+        return 0
+      })
+      
+      setPlans(sortedPlans)
       setMeta(result.data.meta || { page, limit, total: 0, totalPages: 0 })
     } catch (error: any) {
       toast.error(error.message || "Failed to load travel plans")

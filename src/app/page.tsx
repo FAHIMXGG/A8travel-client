@@ -66,8 +66,13 @@ async function getFeaturedTravelPlans() {
     if (!res.ok) return [];
     const data = await res.json();
     const plans = data.data?.data || [];
-    // Sort by participantsCount descending and take top 3
+    // Filter out ended, full, and closed plans, then sort by participantsCount descending and take top 3
     return plans
+      .filter((plan: TravelPlan) => 
+        plan.status !== "ENDED" && 
+        plan.status !== "FULL" && 
+        plan.status !== "CLOSED"
+      )
       .sort((a: TravelPlan, b: TravelPlan) => (b.participantsCount || 0) - (a.participantsCount || 0))
       .slice(0, 3);
   } catch (error) {

@@ -8,7 +8,6 @@ import {
   UserCircle,
   Mail,
   MapPin,
-  Globe,
   Images,
   Star,
   ArrowLeft,
@@ -17,6 +16,7 @@ import {
   Plane,
   Camera,
   Crown,
+  Phone,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -31,6 +31,7 @@ type UserProfile = {
   role: string
   image: string | null
   bio: string | null
+  phone: string | null
   travelInterests: string[]
   visitedCountries: string[]
   currentLocation: string | null
@@ -138,14 +139,6 @@ export default function UserProfilePage() {
     .toUpperCase()
     .slice(0, 2)
 
-  const readableExpiry = profile.subscriptionExpiresAt
-    ? new Date(profile.subscriptionExpiresAt).toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-    : "No expiry date"
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -232,21 +225,16 @@ export default function UserProfilePage() {
               <p className="text-sm text-muted-foreground">{profile.email}</p>
             </div>
 
-            {/* Subscription */}
-            <div className="space-y-2">
-              <h3 className="text-lg font-semibold flex items-center gap-2">
-                <Globe className="h-5 w-5 text-primary" />
-                Subscription
-              </h3>
-              <div className="space-y-1">
-                <Badge className={`${subscriptionTheme.accent} border`}>
-                  {subscriptionTheme.label}
-                </Badge>
-                {profile.subscriptionExpiresAt && (
-                  <p className="text-xs text-muted-foreground">Expires: {readableExpiry}</p>
-                )}
+            {/* Phone */}
+            {profile.phone && (
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Phone className="h-5 w-5 text-primary" />
+                  Phone
+                </h3>
+                <p className="text-sm text-muted-foreground">{profile.phone}</p>
               </div>
-            </div>
+            )}
 
             {/* Travel Interests */}
             {profile.travelInterests && profile.travelInterests.length > 0 && (
