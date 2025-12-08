@@ -7,7 +7,8 @@ import { useSession, signOut } from "next-auth/react"
 import { useTheme } from "next-themes"
 import { Menu, LogOut, LayoutDashboard, Plane, Moon, Sun, UserCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
+import { VisuallyHidden } from "@/components/ui/visually-hidden"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -257,6 +258,9 @@ export default function Navbar() {
               side="right"
               className="w-full sm:w-80 bg-background/95 backdrop-blur-xl border-l border-white/10"
             >
+              <VisuallyHidden>
+                <SheetTitle>Navigation Menu</SheetTitle>
+              </VisuallyHidden>
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5 pointer-events-none" />
 
               <div className="flex flex-col gap-6 mt-6 relative">
