@@ -4,13 +4,10 @@ import { authOptions } from "../../auth/[...nextauth]/route"
 
 const BACKEND_URL = process.env.BACKEND_URL || "https://a8travel-backend.vercel.app"
 
+// Public endpoint to search users
+// Uses auth if available, but works without authentication
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
-      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
-    }
-
     const { searchParams } = new URL(req.url)
     const query = searchParams.get("query") || ""
     const page = searchParams.get("page") || "1"
@@ -26,7 +23,9 @@ export async function GET(req: NextRequest) {
     if (travelInterests) queryParams.set("travelInterests", travelInterests)
     if (visitedCountries) queryParams.set("visitedCountries", visitedCountries)
 
-    const token = (session as any).accessToken
+    // Try to get session, but don't require it
+    const session = await getServerSession(authOptions)
+    const token = session ? (session as any).accessToken : null
 
     const res = await fetch(`${BACKEND_URL}/api/users/search?${queryParams.toString()}`, {
       method: "GET",

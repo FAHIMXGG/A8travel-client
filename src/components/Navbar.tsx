@@ -263,7 +263,7 @@ export default function Navbar() {
               </VisuallyHidden>
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5 pointer-events-none" />
 
-              <div className="flex flex-col gap-6 mt-6 relative">
+              <div className="flex flex-col gap-6 pt-12 px-4 sm:px-6 relative">
                 {/* Mobile Navigation */}
                 <NavItems onClick={() => setIsOpen(false)} className="gap-2" />
 

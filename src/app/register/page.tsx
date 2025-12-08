@@ -6,15 +6,21 @@ import { registerSchema, type RegisterFormValues, type RegisterData } from "@/ap
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, X } from "lucide-react"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function RegisterPage() {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [showPopup, setShowPopup] = useState(false)
+
+  useEffect(() => {
+    // Show popup when component mounts
+    setShowPopup(true)
+  }, [])
 
   const {
     register,
@@ -54,8 +60,41 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 sm:p-6 md:p-8 bg-gradient-to-br from-[#FFFFFF] via-[#FFFFFF] to-[#FFFFFF] dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-800 overflow-hidden rounded-3xl">
-      <div className="w-full max-w-[90%] sm:max-w-md relative">
+    <>
+      {/* Popup Modal */}
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Overlay */}
+          <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowPopup(false)}
+          />
+          
+          {/* Modal Content */}
+          <div className="relative z-50 max-w-3xl w-[75vw] bg-black rounded-lg overflow-hidden shadow-2xl border border-white/30">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowPopup(false)}
+              className="absolute top-4 right-4 z-10 bg-black/80 hover:bg-black text-white rounded-full p-2 transition-all duration-200 flex items-center justify-center w-10 h-10 shadow-lg"
+              aria-label="Close"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            
+            {/* GIF */}
+            <div className="relative w-full aspect-video bg-black">
+              <img
+                src="https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAdyGyTtmPgOxoSZ9kTAsDaGLw6p4heMQKFq2C"
+                alt="Welcome GIF"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 sm:p-6 md:p-8 bg-gradient-to-br from-[#FFFFFF] via-[#FFFFFF] to-[#FFFFFF] dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-800 overflow-hidden rounded-3xl">
+        <div className="w-full max-w-[90%] sm:max-w-md relative">
         {/* Decorative blur elements - hidden on mobile */}
         <div className="hidden sm:block absolute -top-16 -left-16 md:-top-5 md:-left-24 w-32 h-32 md:w-48 md:h-48 bg-primary/20 rounded-full blur-3xl" />
         <div className="hidden sm:block absolute -bottom-16 -right-16 md:-bottom-24 md:-right-24 w-32 h-32 md:w-48 md:h-48 bg-accent/20 rounded-full blur-3xl" />
@@ -189,7 +228,8 @@ export default function RegisterPage() {
             </div>
           </div>
         </div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
