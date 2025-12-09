@@ -1,3 +1,11 @@
+GitHub Server Repo: https://github.com/FAHIMXGG/a8travel-backend
+
+Server Live Deployment: https://a8travel-backend.vercel.app/health
+
+GitHub Client Repo: https://github.com/FAHIMXGG/A8travel-client
+
+Client Live Deployment: https://a8travel-client.vercel.app/
+
 # Travel Buddy - Find Your Perfect Travel Companion
 
 A modern, full-stack web application that connects travelers worldwide, allowing them to find travel companions, join or host travel plans, and create unforgettable adventures together.
