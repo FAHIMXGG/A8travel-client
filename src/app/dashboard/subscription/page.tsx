@@ -176,7 +176,6 @@ export default function SubscriptionPage() {
       // Confirm payment
       const confirmPayment = async () => {
         try {
-          setIsLoading(true)
           const res = await fetch("/api/payments/confirm", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -204,8 +203,6 @@ export default function SubscriptionPage() {
         } catch (e: any) {
           console.error("Payment confirmation error:", e)
           toast.error("Failed to confirm payment. Please contact support.")
-        } finally {
-          setIsLoading(false)
         }
       }
 
