@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
-import { authOptions } from "../[...nextauth]/route"
+import { authOptions } from "@/app/lib/auth-options"
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000"
 
