@@ -105,7 +105,6 @@ const BENEFITS = [
 export default function SubscriptionPage() {
   const { data: session, status, update } = useSession()
   const router = useRouter()
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const user = session?.user
 
@@ -148,54 +147,15 @@ export default function SubscriptionPage() {
       return
     }
 
-    try {
-      setIsLoading(true)
-      setSelectedPlan(plan.id)
-
-      // Create payment intent
-      const res = await fetch("/api/payments/create-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: plan.price * 100, // Convert to cents
-          currency: plan.currency.toLowerCase(),
-          subscriptionDays: plan.duration,
-        }),
-      })
-
-      const data = await res.json()
-
-      if (!res.ok || data?.success === false) {
-        throw new Error(data?.message || "Failed to create payment session")
-      }
-
-      if (data?.data?.checkoutUrl) {
-        // Store session ID and plan details for confirmation after redirect
-        if (data?.data?.sessionId) {
-          const storageData = {
-            sessionId: data.data.sessionId,
-            subscriptionDays: plan.duration.toString(),
-            planId: plan.id,
-            timestamp: Date.now().toString(),
-          }
-          sessionStorage.setItem("paymentSessionId", data.data.sessionId)
-          sessionStorage.setItem("subscriptionDays", plan.duration.toString())
-          sessionStorage.setItem("paymentPlanData", JSON.stringify(storageData))
-          console.log("Stored payment data:", storageData)
-        }
-
-        // Redirect to checkout
-        window.location.href = data.data.checkoutUrl
-      } else {
-        throw new Error("No checkout URL received")
-      }
-    } catch (e: any) {
-      console.error("Subscription error:", e)
-      toast.error(e.message || "Something went wrong")
-      setSelectedPlan(null)
-    } finally {
-      setIsLoading(false)
-    }
+    // Navigate to payment preview page with plan details
+    const params = new URLSearchParams({
+      planId: plan.id,
+      planName: plan.name,
+      planPrice: plan.price.toString(),
+      planDuration: plan.duration.toString(),
+      planCurrency: plan.currency,
+    })
+    router.push(`/dashboard/subscription/preview?${params.toString()}`)
   }
 
   // Check for payment confirmation on mount
@@ -361,14 +321,9 @@ export default function SubscriptionPage() {
                 className="w-full"
                 variant={plan.popular ? "default" : "outline"}
                 onClick={() => handleSubscribe(plan)}
-                disabled={isLoading || isSubscribed}
+                disabled={isSubscribed}
               >
-                {isLoading && selectedPlan === plan.id ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Processing...
-                  </>
-                ) : isSubscribed ? (
+                {isSubscribed ? (
                   "Already Subscribed"
                 ) : (
                   <>

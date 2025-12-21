@@ -19,6 +19,7 @@ import {
   History,
   UserPlus,
   Globe,
+  Ticket,
 } from "lucide-react"
 import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
@@ -52,6 +53,12 @@ const adminOnlyItems: NavItem[] = [
     label: "All Travel Plans",
     icon: Globe,
     description: "Manage all travel plans",
+  },
+  {
+    href: "/dashboard/coupon",
+    label: "Coupon Management",
+    icon: Ticket,
+    description: "Create and manage discount coupons",
   },
   {
     href: "/dashboard/profile",
