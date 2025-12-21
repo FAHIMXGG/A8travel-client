@@ -3,15 +3,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { ExternalLink, Github } from "lucide-react"
 
-export const metadata: Metadata = {
-  title: "Projects",
-  description: "View portfolio projects and previous work. Explore web applications and development projects.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
-
 const projects = [
   {
     id: 1,
@@ -116,9 +107,13 @@ const projects = [
 
 export const revalidate = 60
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Projects",
-  description: "Personal projects and experiments",
+  description: "View portfolio projects and previous work. Explore web applications and development projects.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function ProjectsPage() {

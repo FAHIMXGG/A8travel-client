@@ -1,13 +1,23 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import BlogEditForm from "./_form";
 
 async function getPost(id: string) {
-  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/blogs/${id}`, {
-    cache: "no-store",
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data?.data;
+  try {
+    const headersList = await headers()
+    const host = headersList.get("host")
+    const protocol = process.env.NODE_ENV === "production" ? "https" : "http"
+    const baseUrl = `${protocol}://${host}`
+    
+    const res = await fetch(`${baseUrl}/api/blogs/${id}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.data;
+  } catch {
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
