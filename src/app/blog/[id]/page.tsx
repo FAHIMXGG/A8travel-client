@@ -524,7 +524,7 @@ export default async function BlogPostPage({
           </div>
 
           <div className="p-4 sm:p-6 lg:p-10">
-            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold mb-3 sm:mb-4 lg:mb-6 bg-gradient-to-r from-amber-500 via-orange-500 to-cyan-500 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-headline font-bold mb-3 sm:mb-4 lg:mb-6 bg-gradient-to-r from-amber-500 via-orange-500 to-cyan-500 bg-clip-text text-transparent leading-tight">
               {post.title}
             </h1>
 

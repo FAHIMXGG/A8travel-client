@@ -517,7 +517,7 @@ export default function HomePage() {
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-headline font-bold tracking-tight text-balance">
               <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-cyan-500 bg-clip-text text-transparent">
                 Travel Together,
               </span>
@@ -562,7 +562,7 @@ export default function HomePage() {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-1 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full" />
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Featured Travel Plans</h2>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-headline font-bold">Featured Travel Plans</h2>
                 </div>
                 <p className="text-sm sm:text-base text-muted-foreground">Most popular trips with active travelers</p>
               </div>
@@ -587,7 +587,7 @@ export default function HomePage() {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-1 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-full" />
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Latest Plans</h2>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-headline font-bold">Latest Plans</h2>
                 </div>
                 <p className="text-sm sm:text-base text-muted-foreground">Fresh travel opportunities just added</p>
               </div>
@@ -612,7 +612,7 @@ export default function HomePage() {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-1 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full" />
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Most Popular Travellers</h2>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-headline font-bold">Most Popular Travellers</h2>
                 </div>
                 <p className="text-sm sm:text-base text-muted-foreground">Top-rated travelers in our community</p>
               </div>
@@ -636,7 +636,7 @@ export default function HomePage() {
             <div className="text-center space-y-2">
               <div className="flex items-center justify-center gap-2">
                 <div className="h-8 w-1 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full" />
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">What Our Travelers Say</h2>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-headline font-bold">What Our Travelers Say</h2>
               </div>
               <p className="text-sm sm:text-base text-muted-foreground">Real experiences from our community</p>
             </div>
@@ -686,7 +686,7 @@ export default function HomePage() {
             <div className="text-center space-y-2">
               <div className="flex items-center justify-center gap-2">
                 <div className="h-8 w-1 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-full" />
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Why Choose Us</h2>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-headline font-bold">Why Choose Us</h2>
               </div>
               <p className="text-sm sm:text-base text-muted-foreground">Everything you need for safe and fun travels</p>
             </div>
@@ -743,7 +743,7 @@ export default function HomePage() {
             <div className="text-center space-y-2">
               <div className="flex items-center justify-center gap-2">
                 <div className="h-8 w-1 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full" />
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Popular Destinations</h2>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-headline font-bold">Popular Destinations</h2>
               </div>
               <p className="text-sm sm:text-base text-muted-foreground">Discover trending travel destinations</p>
             </div>
@@ -781,7 +781,7 @@ export default function HomePage() {
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl" />
 
             <div className="relative z-10 max-w-2xl mx-auto text-center space-y-6">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-balance">Ready to Start Your Journey?</h2>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-headline font-bold text-balance">Ready to Start Your Journey?</h2>
               <p className="text-base sm:text-lg text-muted-foreground text-pretty">
                 Join thousands of travelers and create unforgettable memories together. Your next adventure awaits!
               </p>

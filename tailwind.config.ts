@@ -13,7 +13,11 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", ...defaultTheme.fontFamily.sans],
+        sans: ["var(--font-subtext)"],
+        headline: ["var(--font-headline)"],
+        subtext: ["var(--font-subtext)"],
+        "subtext-alt": ["var(--font-subtext-alt)"],
+        accent: ["var(--font-accent)"],
       },
     },
   },

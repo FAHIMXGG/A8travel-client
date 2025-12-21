@@ -42,7 +42,7 @@ export default function AboutPage() {
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-headline font-bold tracking-tight text-balance">
               <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-cyan-500 bg-clip-text text-transparent">
                 Connecting Travelers,
               </span>
@@ -87,7 +87,7 @@ export default function AboutPage() {
             <div className="text-center space-y-4">
               <div className="flex items-center justify-center gap-2">
                 <div className="h-8 w-1 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full" />
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold">How It Works</h2>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-headline font-bold">How It Works</h2>
               </div>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 Getting started with TravelBuddy is simple. Follow these easy steps to begin your next adventure.
@@ -161,7 +161,7 @@ export default function AboutPage() {
                 <div className="text-center space-y-4">
                   <div className="flex items-center justify-center gap-2">
                     <div className="h-8 w-1 bg-gradient-to-b from-amber-500 to-cyan-500 rounded-full" />
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold">Safety & Trust</h2>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-headline font-bold">Safety & Trust</h2>
                   </div>
                   <p className="text-muted-foreground max-w-2xl mx-auto">
                     Your safety and security are our top priorities. We&apos;ve built multiple layers of protection to ensure
@@ -230,7 +230,7 @@ export default function AboutPage() {
             <div className="text-center space-y-4">
               <div className="flex items-center justify-center gap-2">
                 <div className="h-8 w-1 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full" />
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold">Our Mission</h2>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-headline font-bold">Our Mission</h2>
               </div>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 We&apos;re on a mission to make travel more accessible, affordable, and enjoyable for everyone.
@@ -282,7 +282,7 @@ export default function AboutPage() {
             <div className="text-center space-y-4">
               <div className="flex items-center justify-center gap-2">
                 <div className="h-8 w-1 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-full" />
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold">Why Choose TravelBuddy</h2>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-headline font-bold">Why Choose TravelBuddy</h2>
               </div>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 Join thousands of travelers who have discovered the joy of shared adventures.
@@ -355,7 +355,7 @@ export default function AboutPage() {
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl" />
 
             <div className="relative z-10 max-w-2xl mx-auto text-center space-y-6">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-balance">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-headline font-bold text-balance">
                 Ready to Start Your Journey?
               </h2>
               <p className="text-base sm:text-lg text-muted-foreground text-pretty">

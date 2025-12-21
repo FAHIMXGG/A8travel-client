@@ -128,7 +128,7 @@ export default function Navbar() {
           <div className="flex items-center gap-8">
             <Link
               href="/"
-              className="flex items-center gap-2 text-lg font-bold tracking-tight transition-all duration-300 hover:scale-105 group"
+              className="flex items-center gap-2 text-lg font-headline font-bold tracking-tight transition-all duration-300 hover:scale-105 group"
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg blur-md opacity-50 group-hover:opacity-75 transition-opacity" />

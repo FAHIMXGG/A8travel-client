@@ -332,7 +332,7 @@ function FindTravelBuddyContent() {
     <div className="container mx-auto px-4 py-8 space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
+        <h1 className="text-3xl font-headline font-bold flex items-center gap-2">
           <Users className="h-8 w-8 text-primary" />
           Find Travel Buddy
         </h1>
@@ -574,7 +574,7 @@ export default function FindTravelBuddyPage() {
     <Suspense fallback={
       <div className="container mx-auto px-4 py-8 space-y-6">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold flex items-center gap-2">
+          <h1 className="text-3xl font-headline font-bold flex items-center gap-2">
             <Users className="h-8 w-8 text-primary" />
             Find Travel Buddy
           </h1>

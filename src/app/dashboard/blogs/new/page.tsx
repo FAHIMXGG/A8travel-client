@@ -45,7 +45,7 @@ export default function NewBlogPage() {
                 <div className="rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 p-2 shadow-lg sm:p-2.5">
                   <Sparkles className="h-5 w-5 text-white sm:h-6 sm:w-6" />
                 </div>
-                <h1 className="bg-gradient-to-r from-stone-900 via-stone-800 to-stone-700 bg-clip-text text-3xl font-bold text-transparent sm:text-4xl md:text-5xl">
+                <h1 className="bg-gradient-to-r from-stone-900 via-stone-800 to-stone-700 bg-clip-text text-3xl font-headline font-bold text-transparent sm:text-4xl md:text-5xl">
                   Create New Post
                 </h1>
               </div>

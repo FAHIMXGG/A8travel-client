@@ -224,7 +224,7 @@ function PaymentPreviewContent() {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">Payment Preview</h1>
+          <h1 className="text-3xl font-headline font-bold">Payment Preview</h1>
           <p className="text-muted-foreground">Review your subscription details</p>
         </div>
       </div>

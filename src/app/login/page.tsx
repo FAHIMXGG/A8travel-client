@@ -136,7 +136,7 @@ export default function LoginPage() {
 
           <div className="relative z-10 space-y-5 sm:space-y-6">
             <div className="space-y-1.5 sm:space-y-2 text-center">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-headline font-bold tracking-tight bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
                 Welcome back
               </h1>
               <p className="text-xs sm:text-sm text-muted-foreground">

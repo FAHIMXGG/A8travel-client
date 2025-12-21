@@ -124,7 +124,7 @@ export default function ProjectsPage() {
       <div className="container mx-auto px-3 py-6 sm:px-4 sm:py-8 md:px-6 md:py-10 lg:px-8 lg:py-12">
         {/* Header */}
         <div className="mb-6 sm:mb-8 md:mb-10 lg:mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-400 dark:to-orange-400 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-headline font-bold bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-400 dark:to-orange-400 bg-clip-text text-transparent">
             Projects
           </h1>
           <p className="mt-2 text-sm sm:text-base text-muted-foreground">Personal projects and experiments</p>

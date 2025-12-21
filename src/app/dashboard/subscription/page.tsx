@@ -232,7 +232,7 @@ export default function SubscriptionPage() {
           <Crown className="h-4 w-4 text-primary" />
           <span className="text-sm font-medium text-primary">Premium Subscription</span>
         </div>
-        <h1 className="text-4xl font-bold">Unlock Premium Travel Features</h1>
+        <h1 className="text-4xl font-headline font-bold">Unlock Premium Travel Features</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           Join thousands of travelers enjoying exclusive benefits and premium features
         </p>

@@ -369,7 +369,7 @@ function JoinedPageContent() {
               <Users className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
             </div>
             <div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-headline font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                 Joined Plans
               </h1>
               <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
@@ -556,7 +556,7 @@ export default function JoinedPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold">Joined Travel Plans</h1>
+            <h1 className="text-3xl font-headline font-bold">Joined Travel Plans</h1>
           </div>
           <div className="flex items-center justify-center min-h-[400px]">
             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />

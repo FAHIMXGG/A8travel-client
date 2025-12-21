@@ -164,7 +164,7 @@ export default async function BlogPage({
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-balance">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-headline font-bold tracking-tight text-balance">
               <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-cyan-500 bg-clip-text text-transparent">
                 Travel Stories
               </span>
@@ -337,7 +337,7 @@ export default async function BlogPage({
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl" />
 
             <div className="relative z-10 max-w-2xl mx-auto text-center space-y-6">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-balance">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-headline font-bold text-balance">
                 Share Your Travel Story
               </h2>
               <p className="text-base sm:text-lg text-muted-foreground text-pretty">
