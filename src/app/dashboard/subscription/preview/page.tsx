@@ -1,7 +1,7 @@
 "use client"
 
 import { useSession } from "next-auth/react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import {
   Card,
@@ -45,7 +45,7 @@ interface CouponValidationResponse {
   message?: string
 }
 
-export default function PaymentPreviewPage() {
+function PaymentPreviewContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -387,4 +387,16 @@ export default function PaymentPreviewPage() {
   )
 }
 
-
+export default function PaymentPreviewPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="space-y-6">
+          <Skeleton className="h-64 w-full rounded-2xl" />
+        </div>
+      }
+    >
+      <PaymentPreviewContent />
+    </Suspense>
+  )
+}
