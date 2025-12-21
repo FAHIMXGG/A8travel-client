@@ -2,10 +2,16 @@ import Link from "next/link";
 import { Eye, Calendar, Tag, ChevronLeft, ChevronRight, Star, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+import type { Metadata } from "next";
+
 // Page metadata
-export const metadata = {
-  title: "Travel Blog - TravelBuddy",
-  description: "Travel tips, guides, and stories from our community",
+export const metadata: Metadata = {
+  title: "Travel Blog",
+  description: "Discover travel tips, guides, stories, and insights from our community. Learn about destinations, travel planning, safety, and connecting with travel buddies.",
+  openGraph: {
+    title: "TravelBuddy Blog - Travel Tips & Stories",
+    description: "Read travel tips, guides, and stories from our community of travelers.",
+  },
 };
 
 // Format date consistently for SSR/CSR

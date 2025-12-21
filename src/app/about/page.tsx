@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +18,15 @@ import {
   Search,
   Handshake,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description: "Learn about TravelBuddy - the platform connecting travelers worldwide. Discover our mission, values, and how we help you find the perfect travel companion.",
+  openGraph: {
+    title: "About TravelBuddy - Connect with Travelers Worldwide",
+    description: "Learn about TravelBuddy and how we help travelers connect, share experiences, and explore the world together.",
+  },
+};
 
 export default function AboutPage() {
   return (

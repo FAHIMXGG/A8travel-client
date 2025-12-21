@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
@@ -13,6 +14,15 @@ import {
   ChevronsRight,
 } from "lucide-react"
 import DeleteBlogButton from "@/components/DeleteBlogButton"
+
+export const metadata: Metadata = {
+  title: "My Blogs",
+  description: "Manage your blog posts. View, edit, and delete your published articles.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 type Blog = {
   _id: string

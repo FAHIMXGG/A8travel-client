@@ -10,6 +10,7 @@ import { Eye, EyeOff, X } from "lucide-react"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
+import Image from "next/image"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -83,10 +84,12 @@ export default function RegisterPage() {
             
             {/* GIF */}
             <div className="relative w-full aspect-video bg-black">
-              <img
+              <Image
                 src="https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAdyGyTtmPgOxoSZ9kTAsDaGLw6p4heMQKFq2C"
                 alt="Welcome GIF"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                unoptimized
               />
             </div>
           </div>

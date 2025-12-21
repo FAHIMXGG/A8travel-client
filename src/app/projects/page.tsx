@@ -1,6 +1,16 @@
+import type { Metadata } from "next";
 import Image from "next/image"
 import Link from "next/link"
 import { ExternalLink, Github } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Projects",
+  description: "View portfolio projects and previous work. Explore web applications and development projects.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 const projects = [
   {

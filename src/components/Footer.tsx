@@ -14,17 +14,17 @@ export function Footer() {
   ];
 
   const resources = [
-    { name: "How It Works", href: "/about" },
-    { name: "Safety Guidelines", href: "/about" },
-    { name: "Travel Tips", href: "/blog" },
-    { name: "FAQ", href: "/about" },
+    { name: "How It Works", href: "/how-it-works" },
+    { name: "Safety Guidelines", href: "/safety-guidelines" },
+    { name: "Travel Tips", href: "/travel-tips" },
+    { name: "FAQ", href: "/faq" },
   ];
 
   const legal = [
-    { name: "Privacy Policy", href: "/about" },
-    { name: "Terms of Service", href: "/about" },
-    { name: "Community Guidelines", href: "/about" },
-    { name: "Contact Us", href: "/about" },
+    { name: "Privacy Policy", href: "/privacy-policy" },
+    { name: "Terms of Service", href: "/terms-of-service" },
+    { name: "Community Guidelines", href: "/community-guidelines" },
+    { name: "Contact Us", href: "/contact-us" },
   ];
 
   const socialLinks = [

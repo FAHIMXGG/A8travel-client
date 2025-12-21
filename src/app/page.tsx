@@ -2,11 +2,21 @@ import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { headers } from "next/headers";
+import type { Metadata } from "next";
 import { ArrowRight, Sparkles, Clock, Calendar, MapPin, Users, DollarSign, Star, Plane, Globe, Shield, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { isUnoptimizedCdn } from "@/lib/is-unoptimized-cdn";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Discover amazing travel plans, connect with travel buddies, and explore the world together. Join group trips, find compatible travelers, and create unforgettable adventures.",
+  openGraph: {
+    title: "TravelBuddy - Find Your Perfect Travel Companion",
+    description: "Discover amazing travel plans, connect with travel buddies, and explore the world together.",
+  },
+};
 
 // Tiny inline blur placeholder (universal fallback)
 const TINY_BLUR =
@@ -132,7 +142,7 @@ function TravelPlansSkeleton() {
   return (
     <div className="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="rounded-2xl bg-background/40 backdrop-blur-xl border border-white/10 overflow-hidden">
+        <div key={i} className="rounded-2xl bg-background/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 overflow-hidden">
           <div className="h-48 sm:h-56 bg-gradient-to-br from-muted/50 to-muted/20 animate-pulse" />
           <div className="p-5 sm:p-6 space-y-3">
             <div className="h-6 bg-muted/50 rounded animate-pulse" />
@@ -152,7 +162,7 @@ function TravellersSkeleton() {
   return (
     <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
       {[1, 2, 3, 4, 5, 6].map((i) => (
-        <div key={i} className="rounded-xl bg-background/40 backdrop-blur-xl border border-white/10 p-4 space-y-3">
+        <div key={i} className="rounded-xl bg-background/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 p-4 space-y-3">
           <div className="w-16 h-16 mx-auto rounded-full bg-muted/50 animate-pulse" />
           <div className="h-4 bg-muted/50 rounded animate-pulse" />
           <div className="h-3 bg-muted/30 rounded animate-pulse w-2/3 mx-auto" />
@@ -199,7 +209,7 @@ async function FeaturedTravelPlans() {
           <Link
             key={plan.id}
             href={`/travelplan/${plan.id}`}
-            className="group relative overflow-hidden rounded-2xl bg-background/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-amber-500/10"
+            className="group relative overflow-hidden rounded-2xl bg-background/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-amber-500/10"
             style={{ animationDelay: `${index * 100}ms` }}
           >
             {/* Featured Badge */}
@@ -314,7 +324,7 @@ async function LatestTravelPlans() {
           <Link
             key={plan.id}
             href={`/travelplan/${plan.id}`}
-            className="group relative overflow-hidden rounded-2xl bg-background/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/10"
+            className="group relative overflow-hidden rounded-2xl bg-background/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/10"
             style={{ animationDelay: `${index * 100}ms` }}
           >
             {/* Thumbnail */}
@@ -413,7 +423,7 @@ async function PopularTravellers() {
         <Link
           key={user.id}
           href={`/users/${user.id}`}
-          className="group relative overflow-hidden rounded-xl bg-background/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-amber-500/10 p-4 text-center"
+          className="group relative overflow-hidden rounded-xl bg-background/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-amber-500/10 p-4 text-center"
         >
           <div className="relative w-16 h-16 mx-auto mb-3">
             <Avatar className="w-16 h-16">
@@ -510,7 +520,7 @@ export default function HomePage() {
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-16 sm:py-24 lg:py-32">
           <div className="max-w-4xl mx-auto text-center space-y-6 sm:space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/10 to-cyan-500/10 backdrop-blur-sm border border-white/10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/10 to-cyan-500/10 backdrop-blur-sm border border-gray-200 dark:border-white/10">
               <Plane className="h-4 w-4 text-amber-500" />
               <span className="text-sm font-medium bg-gradient-to-r from-amber-500 to-cyan-500 bg-clip-text text-transparent">
                 Find Your Perfect Travel Companion
@@ -544,7 +554,7 @@ export default function HomePage() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="group border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-sm bg-transparent"
+                className="group border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 hover:bg-white/5 backdrop-blur-sm bg-transparent"
               >
                 <Link href="/FindTravelBuddy">
                   Find Travel Buddy
@@ -645,7 +655,7 @@ export default function HomePage() {
               {dummyReviews.map((review) => (
                 <div
                   key={review.id}
-                  className="relative overflow-hidden rounded-2xl bg-background/40 backdrop-blur-xl border border-white/10 p-6 space-y-4 hover:border-white/20 transition-all duration-300"
+                  className="relative overflow-hidden rounded-2xl bg-background/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 p-6 space-y-4 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300"
                 >
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
@@ -660,7 +670,7 @@ export default function HomePage() {
                     ))}
                   </div>
                   <p className="text-sm text-muted-foreground line-clamp-4">{review.comment}</p>
-                  <div className="flex items-center gap-3 pt-2 border-t border-white/10">
+                  <div className="flex items-center gap-3 pt-2 border-t border-gray-200 dark:border-white/10">
                     <Avatar className="w-10 h-10">
                       <AvatarFallback className="bg-gradient-to-br from-amber-500/20 to-cyan-500/20">
                         {review.name.charAt(0)}
@@ -724,7 +734,7 @@ export default function HomePage() {
               ].map((feature, index) => (
                 <div
                   key={index}
-                  className="relative overflow-hidden rounded-2xl bg-background/40 backdrop-blur-xl border border-white/10 p-6 space-y-4 hover:border-white/20 transition-all duration-300 hover:scale-105"
+                  className="relative overflow-hidden rounded-2xl bg-background/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 p-6 space-y-4 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300 hover:scale-105"
                 >
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center`}>
                     <feature.icon className={`h-6 w-6 ${feature.iconColor}`} />
@@ -758,7 +768,7 @@ export default function HomePage() {
                 <Link
                   key={index}
                   href={`/travelplan?destination=${destination.name}`}
-                  className="group relative overflow-hidden rounded-2xl bg-background/40 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 p-6 text-center space-y-3"
+                  className="group relative overflow-hidden rounded-2xl bg-background/40 backdrop-blur-xl border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300 hover:scale-105 p-6 text-center space-y-3"
                 >
                   <div className="text-4xl mb-2">{destination.flag}</div>
                   <h3 className="text-lg font-semibold group-hover:text-amber-500 transition-colors">
@@ -776,7 +786,7 @@ export default function HomePage() {
 
         {/* CTA Section */}
         <section className="container mx-auto px-4 py-12 sm:py-16 lg:py-20">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-cyan-500/10 backdrop-blur-xl border border-white/10 p-8 sm:p-12 lg:p-16">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-cyan-500/10 backdrop-blur-xl border border-gray-200 dark:border-white/10 p-8 sm:p-12 lg:p-16">
             <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/20 rounded-full blur-3xl" />
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl" />
 
@@ -800,7 +810,7 @@ export default function HomePage() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-sm bg-transparent"
+                  className="border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 hover:bg-white/5 backdrop-blur-sm bg-transparent"
                 >
                   <Link href="/FindTravelBuddy">Find Travel Buddy</Link>
                 </Button>

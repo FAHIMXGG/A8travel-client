@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import { ReactNode } from "react"
 import Sidebar from "@/components/dashboard/sidebar"
 
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "Manage your travel plans, profile, subscriptions, and more from your TravelBuddy dashboard.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
 return (

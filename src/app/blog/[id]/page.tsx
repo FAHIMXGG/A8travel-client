@@ -452,18 +452,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const p = await params;
   const id = Array.isArray(p.id) ? p.id[0] : p.id;
-  if (!id) return { title: "Post", description: "Blog post" };
+  if (!id) return { title: "Blog Post", description: "Travel blog post" };
 
   const post = getPost(id);
-  if (!post) return { title: "Post", description: "Blog post" };
+  if (!post) return { title: "Blog Post Not Found", description: "The blog post you're looking for doesn't exist." };
 
   return {
     title: post.title,
-    description: post.excerpt ?? "Blog post",
+    description: post.excerpt || `Read about ${post.title} on TravelBuddy. ${post.tags?.join(", ") || ""}`,
+    keywords: post.tags || [],
     openGraph: {
       title: post.title,
-      description: post.excerpt ?? undefined,
+      description: post.excerpt || undefined,
       type: "article",
+      publishedTime: post.createdAt,
+      authors: post.author?.name ? [post.author.name] : undefined,
+      tags: post.tags,
+      images: post.thumbnailUrl ? [post.thumbnailUrl] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt || undefined,
     },
   };
 }

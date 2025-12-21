@@ -18,9 +18,13 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      "*.config.*",
+      "tailwind.config.ts",
     ],
     rules: {
       "@typescript-eslint/no-explicit-any": "off", // 👈 disable globally
+      "@typescript-eslint/triple-slash-reference": "off", // next-env.d.ts uses triple slash
+      "@typescript-eslint/no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
     },
   },
 ];

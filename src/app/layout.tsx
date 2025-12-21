@@ -34,8 +34,25 @@ const pacifico = Pacifico({
 
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "Personal portfolio with blog",
+  title: {
+    default: "TravelBuddy - Find Your Perfect Travel Companion",
+    template: "%s | TravelBuddy",
+  },
+  description: "Connect with like-minded travelers, join group trips, and explore the world together. Find travel buddies, create travel plans, and share amazing adventures.",
+  keywords: ["travel buddy", "travel companion", "group travel", "travel plans", "find travelers", "travel community"],
+  authors: [{ name: "TravelBuddy" }],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "TravelBuddy",
+    title: "TravelBuddy - Find Your Perfect Travel Companion",
+    description: "Connect with like-minded travelers, join group trips, and explore the world together.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TravelBuddy - Find Your Perfect Travel Companion",
+    description: "Connect with like-minded travelers, join group trips, and explore the world together.",
+  },
 };
 
 export default function RootLayout({

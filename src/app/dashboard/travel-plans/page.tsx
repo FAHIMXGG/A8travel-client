@@ -555,13 +555,13 @@ function AdminTravelPlansPageContent() {
     <div className="min-h-screen relative">
       <div className="fixed inset-0 -z-10 bg-gradient-to-br from-background via-background to-muted/20" />
 
-      <div className="fixed top-20 right-20 w-72 h-72 bg-primary/5 rounded-full blur-3xl -z-10 animate-pulse" />
+      <div className="hidden sm:block fixed top-20 right-20 w-72 h-72 bg-primary/5 rounded-full blur-3xl -z-10 animate-pulse" />
       <div
-        className="fixed bottom-20 left-20 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl -z-10 animate-pulse"
+        className="hidden sm:block fixed bottom-20 left-20 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl -z-10 animate-pulse"
         style={{ animationDelay: "1s" }}
       />
 
-      <div className="space-y-4 sm:space-y-6 p-3 sm:p-0">
+      <div className="space-y-4 sm:space-y-6 p-2 sm:p-3 lg:p-3">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
           <div className="flex items-center gap-3">
@@ -586,7 +586,7 @@ function AdminTravelPlansPageContent() {
             <h3 className="text-sm font-semibold">Filters & Search</h3>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
               <label className="text-xs font-medium text-muted-foreground">Host ID</label>
               <Input
@@ -629,7 +629,7 @@ function AdminTravelPlansPageContent() {
               </Select>
             </div>
 
-            <div className="flex items-end gap-2">
+            <div className="flex items-end gap-2 sm:col-span-2 lg:col-span-1">
               <Button onClick={handleSearch} className="flex-1 h-10 gap-2">
                 <Search className="h-4 w-4" />
                 Search
@@ -639,10 +639,10 @@ function AdminTravelPlansPageContent() {
                   onClick={handleClearFilters}
                   variant="outline"
                   size="sm"
-                  className="h-10 gap-2 bg-transparent"
+                  className="h-10 gap-2 bg-transparent shrink-0"
                 >
                   <X className="h-4 w-4" />
-                  Clear
+                  <span className="hidden sm:inline">Clear</span>
                 </Button>
               )}
             </div>
@@ -664,17 +664,17 @@ function AdminTravelPlansPageContent() {
         ) : (
           <>
             {/* Desktop Table View */}
-            <div className="hidden lg:block overflow-hidden rounded-xl border border-border/50 bg-card/30 backdrop-blur-md">
-              <table className="w-full text-sm">
+            <div className="hidden lg:block rounded-xl border border-border/50 bg-card/30 backdrop-blur-md">
+              <table className="w-full text-xs 2xl:text-sm">
                 <thead className="bg-muted/30 backdrop-blur-sm border-b border-border/50">
                   <tr>
-                    <th className="text-left p-4 font-semibold">Title</th>
-                    <th className="text-left p-4 font-semibold">Host</th>
-                    <th className="text-left p-4 font-semibold">Destination</th>
-                    <th className="text-left p-4 font-semibold">Dates</th>
-                    <th className="text-left p-4 font-semibold">Participants</th>
-                    <th className="text-left p-4 font-semibold">Status</th>
-                    <th className="text-right p-4 font-semibold">Actions</th>
+                    <th className="text-left p-1 2xl:p-2 font-semibold w-[15%]">Title</th>
+                    <th className="text-left p-1 2xl:p-2 font-semibold w-[8%]">Host</th>
+                    <th className="text-left p-1 2xl:p-2 font-semibold w-[18%]">Destination</th>
+                    <th className="text-left p-1 2xl:p-2 font-semibold w-[16%]">Dates</th>
+                    <th className="text-left p-1 2xl:p-2 font-semibold w-[9%] whitespace-nowrap">Participants</th>
+                    <th className="text-left p-1 2xl:p-2 font-semibold w-[8%] whitespace-nowrap">Status</th>
+                    <th className="text-right p-1 2xl:p-2 font-semibold w-[26%]">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -688,64 +688,88 @@ function AdminTravelPlansPageContent() {
                         key={planId}
                         className="border-t border-border/30 hover:bg-muted/20 transition-colors"
                       >
-                        <td className="p-4">
+                        <td className="p-1 2xl:p-2">
                           <Link
                             href={`/travelplan/${planId}`}
-                            className="font-medium max-w-[200px] truncate hover:text-primary transition-colors"
+                            className="font-medium truncate block hover:text-primary transition-colors text-xs 2xl:text-sm max-w-full"
+                            title={plan.title}
                           >
                             {plan.title}
                           </Link>
-                          <div className="text-xs text-muted-foreground mt-1">
+                          <div className="text-[10px] 2xl:text-xs text-muted-foreground mt-0.5 truncate">
                             {TRAVEL_TYPES[plan.travelType] || plan.travelType}
                           </div>
                         </td>
-                        <td className="p-4">
-                          <div>
+                        <td className="p-1 2xl:p-2">
+                          <div className="min-w-0">
                             <Link
                               href={`/users/${plan.hostId}`}
-                              className="font-medium text-xs hover:text-primary transition-colors"
+                              className="font-medium text-[10px] 2xl:text-xs hover:text-primary transition-colors block truncate max-w-full"
+                              title={plan.hostName || "Unknown"}
                             >
                               {plan.hostName || "Unknown"}
                             </Link>
-                            <div className="text-xs text-muted-foreground font-mono">
-                              {plan.hostId.slice(0, 8)}...
+                            <div className="text-[9px] 2xl:text-[10px] text-muted-foreground font-mono truncate">
+                              {plan.hostId.slice(0, 5)}...
                             </div>
                           </div>
                         </td>
-                        <td className="p-4">
-                          <div className="flex items-center gap-1.5 text-xs">
-                            <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
-                            <span className="text-muted-foreground">
-                              {plan.destinationCity}, {plan.destinationCountry}
+                        <td className="p-1 2xl:p-2">
+                          <div className="flex items-center gap-0.5 2xl:gap-1 text-[10px] 2xl:text-xs min-w-0">
+                            <MapPin className="h-3 w-3 2xl:h-3.5 2xl:w-3.5 text-muted-foreground shrink-0" />
+                            <span 
+                              className="text-muted-foreground truncate max-w-full" 
+                              title={`${plan.destinationCity}, ${plan.destinationCountry}`}
+                            >
+                              {(() => {
+                                const fullDestination = `${plan.destinationCity}, ${plan.destinationCountry}`;
+                                if (plan.destinationCity.includes('(')) {
+                                  const cityPart = plan.destinationCity.split('(')[0].trim();
+                                  const locationsPart = plan.destinationCity.split('(')[1];
+                                  const firstLocation = locationsPart.split(',')[0];
+                                  return `${cityPart} (${firstLocation}...`;
+                                }
+                                return fullDestination.length > 25 ? fullDestination.substring(0, 22) + '...' : fullDestination;
+                              })()}
                             </span>
                           </div>
                         </td>
-                        <td className="p-4">
-                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                            <Calendar className="h-3.5 w-3.5" />
-                            <div>
-                              <div>{formatDate(plan.startDate)}</div>
-                              <div className="text-xs">to {formatDate(plan.endDate)}</div>
+                        <td className="p-1 2xl:p-2">
+                          <div className="flex items-start gap-0.5 2xl:gap-1 text-[10px] 2xl:text-xs text-muted-foreground min-w-0">
+                            <Calendar className="h-3 w-3 2xl:h-3.5 2xl:w-3.5 shrink-0 mt-0.5" />
+                            <div className="min-w-0 flex-1">
+                              <div className="truncate leading-tight">
+                                {(() => {
+                                  const date = new Date(plan.startDate);
+                                  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                                })()}
+                              </div>
+                              <div className="text-[9px] 2xl:text-[10px] truncate leading-tight">
+                                {(() => {
+                                  const date = new Date(plan.endDate);
+                                  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                                })()}
+                              </div>
                             </div>
                           </div>
                         </td>
-                        <td className="p-4">
-                          <div className="flex items-center gap-1.5 text-xs">
-                            <Users className="h-3.5 w-3.5 text-muted-foreground" />
-                            <span className="font-medium">
+                        <td className="p-1 2xl:p-2">
+                          <div className="flex items-center gap-0.5 2xl:gap-1 text-[10px] 2xl:text-xs">
+                            <Users className="h-3 w-3 2xl:h-3.5 2xl:w-3.5 text-muted-foreground shrink-0" />
+                            <span className="font-medium whitespace-nowrap">
                               {plan.participantsCount} / {plan.maxParticipants || "∞"}
                             </span>
                           </div>
                         </td>
-                        <td className="p-4">
+                        <td className="p-1 2xl:p-2">
                           <Select
                             value={plan.status}
                             onValueChange={(value) => handleStatusChange(planId, value)}
                             disabled={isUpdatingStatus}
                           >
-                            <SelectTrigger className="h-8 w-32 text-xs">
+                            <SelectTrigger className="h-6 2xl:h-7 w-full text-[10px] 2xl:text-xs px-1 2xl:px-2 max-w-[65px] 2xl:max-w-[80px]">
                               {isUpdatingStatus ? (
-                                <Loader2 className="h-3 w-3 animate-spin" />
+                                <Loader2 className="h-3 w-3 2xl:h-3.5 2xl:w-3.5 animate-spin" />
                               ) : (
                                 <SelectValue />
                               )}
@@ -754,36 +778,34 @@ function AdminTravelPlansPageContent() {
                               <SelectItem value="OPEN">Open</SelectItem>
                               <SelectItem value="CLOSED">Closed</SelectItem>
                               <SelectItem value="CANCELED">Canceled</SelectItem>
-                              <SelectItem value="FULL">Full</SelectItem>
-                              <SelectItem value="ENDED">Ended</SelectItem>
+                              <SelectItem value="FULL" disabled>Full</SelectItem>
+                              <SelectItem value="ENDED" disabled>Ended</SelectItem>
                             </SelectContent>
                           </Select>
                         </td>
-                        <td className="p-4">
-                          <div className="flex justify-end gap-2">
+                        <td className="p-1 2xl:p-2">
+                          <div className="flex justify-end gap-0.5 2xl:gap-1">
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => handleViewParticipants(planId)}
-                              className="h-8 gap-1.5"
+                              className="h-6 2xl:h-7 gap-0 px-1 2xl:px-1.5 min-w-[22px] 2xl:min-w-[28px]"
+                              title="View Participants"
                             >
-                              <Eye className="h-3.5 w-3.5" />
-                              View
+                              <Eye className="h-3 w-3 2xl:h-3.5 2xl:w-3.5" />
                             </Button>
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => handleEdit(plan)}
                               disabled={isUpdating}
-                              className="h-8 gap-1.5"
+                              className="h-6 2xl:h-7 gap-0 px-1 2xl:px-1.5 min-w-[22px] 2xl:min-w-[28px]"
+                              title="Edit"
                             >
                               {isUpdating ? (
-                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                <Loader2 className="h-3 w-3 2xl:h-3.5 2xl:w-3.5 animate-spin" />
                               ) : (
-                                <>
-                                  <Edit2 className="h-3.5 w-3.5" />
-                                  Edit
-                                </>
+                                <Edit2 className="h-3 w-3 2xl:h-3.5 2xl:w-3.5" />
                               )}
                             </Button>
                             <Button
@@ -793,10 +815,10 @@ function AdminTravelPlansPageContent() {
                                 setPlanToDelete(planId)
                                 setShowDeleteDialog(true)
                               }}
-                              className="h-8 gap-1.5"
+                              className="h-6 2xl:h-7 gap-0 px-1 2xl:px-1.5 min-w-[22px] 2xl:min-w-[28px]"
+                              title="Delete"
                             >
-                              <Trash2 className="h-3.5 w-3.5" />
-                              Delete
+                              <Trash2 className="h-3 w-3 2xl:h-3.5 2xl:w-3.5" />
                             </Button>
                           </div>
                         </td>
@@ -881,11 +903,11 @@ function AdminTravelPlansPageContent() {
                           <SelectItem value="OPEN">Open</SelectItem>
                           <SelectItem value="CLOSED">Closed</SelectItem>
                           <SelectItem value="CANCELED">Canceled</SelectItem>
-                          <SelectItem value="FULL">Full</SelectItem>
-                          <SelectItem value="ENDED">Ended</SelectItem>
+                          <SelectItem value="FULL" disabled>Full</SelectItem>
+                          <SelectItem value="ENDED" disabled>Ended</SelectItem>
                         </SelectContent>
                       </Select>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <Button
                           variant="outline"
                           size="sm"
@@ -893,7 +915,7 @@ function AdminTravelPlansPageContent() {
                           className="w-full gap-1.5"
                         >
                           <Eye className="h-3.5 w-3.5" />
-                          View
+                          <span className="hidden sm:inline">View</span>
                         </Button>
                         <Button
                           variant="outline"
@@ -907,7 +929,7 @@ function AdminTravelPlansPageContent() {
                           ) : (
                             <>
                               <Edit2 className="h-3.5 w-3.5" />
-                              Edit
+                              <span className="hidden sm:inline">Edit</span>
                             </>
                           )}
                         </Button>
@@ -921,7 +943,7 @@ function AdminTravelPlansPageContent() {
                           className="w-full gap-1.5"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
-                          Delete
+                          <span className="hidden sm:inline">Delete</span>
                         </Button>
                       </div>
                     </div>
@@ -942,7 +964,7 @@ function AdminTravelPlansPageContent() {
 
       {/* Edit Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto w-[95vw] sm:w-full">
           <DialogHeader>
             <DialogTitle>Edit Travel Plan</DialogTitle>
             <DialogDescription>Update travel plan details</DialogDescription>
@@ -968,7 +990,7 @@ function AdminTravelPlansPageContent() {
                   rows={4}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Destination City</label>
                   <Input
@@ -988,7 +1010,7 @@ function AdminTravelPlansPageContent() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Start Date</label>
                   <Input
@@ -1024,7 +1046,7 @@ function AdminTravelPlansPageContent() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Min Budget</label>
                   <Input
@@ -1052,7 +1074,7 @@ function AdminTravelPlansPageContent() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Travel Type</label>
                   <Select
@@ -1099,11 +1121,11 @@ function AdminTravelPlansPageContent() {
                   Public
                 </label>
               </div>
-              <div className="flex justify-end gap-2 pt-4">
-                <Button variant="outline" onClick={() => setShowEditDialog(false)}>
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-4">
+                <Button variant="outline" onClick={() => setShowEditDialog(false)} className="w-full sm:w-auto">
                   Cancel
                 </Button>
-                <Button onClick={handleSaveEdit} disabled={updatingPlanId !== null}>
+                <Button onClick={handleSaveEdit} disabled={updatingPlanId !== null} className="w-full sm:w-auto">
                   {updatingPlanId ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -1130,7 +1152,7 @@ function AdminTravelPlansPageContent() {
           }
         }}
       >
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl w-[95vw] sm:w-full">
           <DialogHeader>
             <DialogTitle>
               Participants
@@ -1194,19 +1216,19 @@ function AdminTravelPlansPageContent() {
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="w-[95vw] sm:w-full">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Travel Plan</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete this travel plan? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogFooter className="flex-col-reverse sm:flex-row gap-2">
+            <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={deletingPlanId !== null}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               {deletingPlanId ? (
                 <>

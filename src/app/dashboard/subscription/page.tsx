@@ -1,7 +1,7 @@
 "use client"
 
 import { useSession } from "next-auth/react"
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import {
   Card,
@@ -26,7 +26,6 @@ import {
   ShieldCheck,
   Zap,
   Globe,
-  Loader2,
   ArrowRight,
 } from "lucide-react"
 
@@ -105,7 +104,6 @@ const BENEFITS = [
 export default function SubscriptionPage() {
   const { data: session, status, update } = useSession()
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
   const user = session?.user
 
   const subscriptionStatus = user?.subscriptionStatus ?? "NONE"

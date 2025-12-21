@@ -1,4 +1,5 @@
 // src/app/dashboard/blogs/[id]/page.tsx
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,32 @@ async function getPost(id: string) {
     console.error("getPost error:", e);
     return null;
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const post = await getPost(id);
+  
+  if (!post) {
+    return {
+      title: "Blog Post Not Found",
+      description: "The blog post you're looking for doesn't exist.",
+    };
+  }
+  
+  return {
+    title: `${post.title} - Dashboard`,
+    description: post.excerpt || post.content?.substring(0, 160) || `View and manage blog post: ${post.title}`,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt || post.content?.substring(0, 160),
+      images: post.thumbnailUrl ? [post.thumbnailUrl] : undefined,
+    },
+  };
 }
 
 // ✅ Note the Promise type and the await on params

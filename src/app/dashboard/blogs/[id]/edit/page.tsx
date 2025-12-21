@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import BlogEditForm from "./_form";
 
 async function getPost(id: string) {
@@ -7,6 +8,20 @@ async function getPost(id: string) {
   if (!res.ok) return null;
   const data = await res.json();
   return data?.data;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const post = await getPost(id);
+  
+  return {
+    title: post ? `Edit ${post.title}` : "Edit Blog Post",
+    description: "Edit your blog post content, title, tags, and other details.",
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
 }
 
 export default async function EditBlogPage({

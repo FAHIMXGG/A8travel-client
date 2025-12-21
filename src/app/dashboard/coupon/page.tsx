@@ -34,7 +34,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import {
   Ticket,
-  Search,
   Plus,
   Edit,
   Trash2,
@@ -43,12 +42,10 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Filter,
-  X,
   Loader2,
   Calendar,
   Percent,
   DollarSign,
-  Hash,
   CheckCircle2,
   XCircle,
 } from "lucide-react"
