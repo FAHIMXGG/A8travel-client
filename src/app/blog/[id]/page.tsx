@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, Eye, Tag, FolderOpen, Star, Plane } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import ImageWithSkeleton from "@/components/ui/image-with-skeleton";
 
 // Dummy blog posts with full content
 const dummyBlogPosts = [
@@ -51,7 +52,7 @@ const dummyBlogPosts = [
     tags: ["Travel Tips", "Community", "Planning"],
     categories: ["Tips & Guides"],
     isFeatured: true,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAqyJlhouegOrActsXpGZMbvBaPo8F12ldw3Qm",
     views: 1250,
     createdAt: "2024-12-15T10:00:00.000Z",
     author: {
@@ -117,7 +118,7 @@ const dummyBlogPosts = [
     tags: ["Solo Travel", "Group Travel", "Lifestyle"],
     categories: ["Travel Styles"],
     isFeatured: true,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAmPbsnvIa2qwIClLUtbQjxaWNF1eERBTmfdJn",
     views: 980,
     createdAt: "2024-12-12T10:00:00.000Z",
     author: {
@@ -158,7 +159,7 @@ const dummyBlogPosts = [
     tags: ["Budget Travel", "Destinations", "2025"],
     categories: ["Destinations"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAWezyKcN98bzYhDWXrloT4ZN0twumF6ai7eOB",
     views: 2100,
     createdAt: "2024-12-10T10:00:00.000Z",
     author: {
@@ -205,7 +206,7 @@ const dummyBlogPosts = [
     tags: ["Safety", "Security", "Tips"],
     categories: ["Safety"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAz6lzdr3bnuIGS7AkBUre5iWcFmvTJLfDMQdO",
     views: 1750,
     createdAt: "2024-12-08T10:00:00.000Z",
     author: {
@@ -246,7 +247,7 @@ const dummyBlogPosts = [
     tags: ["Southeast Asia", "Hidden Gems", "Adventure"],
     categories: ["Destinations"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrA1jaPFoEpswgOmXG0ZRhuiQdfnP4ycBUEHrLv",
     views: 1450,
     createdAt: "2024-12-05T10:00:00.000Z",
     author: {
@@ -299,7 +300,7 @@ const dummyBlogPosts = [
     tags: ["Budget", "Group Travel", "Finance"],
     categories: ["Tips & Guides"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAFBYtAQ0NrnoPgsFlSUhMXAO1dbtYp6ycKja0",
     views: 1320,
     createdAt: "2024-12-03T10:00:00.000Z",
     author: {
@@ -338,7 +339,7 @@ const dummyBlogPosts = [
     tags: ["Community", "Friendship", "Stories"],
     categories: ["Community"],
     isFeatured: true,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrApH6qMNlYeCl4rdcFu6XHQa2wPxT0EtnAi7bS",
     views: 1890,
     createdAt: "2024-12-01T10:00:00.000Z",
     author: {
@@ -383,7 +384,7 @@ const dummyBlogPosts = [
     tags: ["Packing", "Essentials", "Preparation"],
     categories: ["Tips & Guides"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrApxTfozflYeCl4rdcFu6XHQa2wPxT0EtnAi7b",
     views: 1100,
     createdAt: "2024-11-28T10:00:00.000Z",
     author: {
@@ -430,7 +431,7 @@ const dummyBlogPosts = [
     tags: ["Culture", "Etiquette", "Respect"],
     categories: ["Culture"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrA8RyqfFTFMWlx4tJ9a0dvjrIHgDGphuCTwoOk",
     views: 950,
     createdAt: "2024-11-25T10:00:00.000Z",
     author: {
@@ -517,11 +518,22 @@ export default async function BlogPostPage({
         <div className="bg-background/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
           {/* Thumbnail */}
           <div className="relative h-64 sm:h-80 overflow-hidden bg-gradient-to-br from-amber-500/5 to-orange-500/5">
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="p-6 rounded-xl bg-background/60 backdrop-blur-sm border border-white/10">
-                <Plane className="w-16 h-16 text-amber-500/50" />
+            {post.thumbnailUrl ? (
+              <ImageWithSkeleton
+                src={post.thumbnailUrl}
+                alt={post.title}
+                fill
+                className="object-cover"
+                containerClassName="w-full h-full"
+                priority={post.isFeatured}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="p-6 rounded-xl bg-background/60 backdrop-blur-sm border border-white/10">
+                  <Plane className="w-16 h-16 text-amber-500/50" />
+                </div>
               </div>
-            </div>
+            )}
             {post.isFeatured && (
               <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
                 <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 shadow-lg backdrop-blur-sm px-3 py-1.5 text-xs sm:text-sm">

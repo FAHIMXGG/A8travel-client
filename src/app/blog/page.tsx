@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Eye, Calendar, Tag, ChevronLeft, ChevronRight, Star, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ImageWithSkeleton from "@/components/ui/image-with-skeleton";
 
 import type { Metadata } from "next";
 
@@ -34,7 +35,7 @@ const dummyBlogPosts = [
     excerpt: "Discover how to connect with like-minded travelers and ensure a smooth journey together. Learn about communication, planning, and compatibility.",
     tags: ["Travel Tips", "Community", "Planning"],
     isFeatured: true,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAqyJlhouegOrActsXpGZMbvBaPo8F12ldw3Qm",
     views: 1250,
     createdAt: "2024-12-15T10:00:00.000Z",
     category: "Tips & Guides",
@@ -45,7 +46,7 @@ const dummyBlogPosts = [
     excerpt: "Explore the pros and cons of traveling alone versus with a group. Find out which style matches your personality and travel goals.",
     tags: ["Solo Travel", "Group Travel", "Lifestyle"],
     isFeatured: true,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAmPbsnvIa2qwIClLUtbQjxaWNF1eERBTmfdJn",
     views: 980,
     createdAt: "2024-12-12T10:00:00.000Z",
     category: "Travel Styles",
@@ -56,7 +57,7 @@ const dummyBlogPosts = [
     excerpt: "Plan your next adventure without breaking the bank. We've compiled a list of amazing destinations that offer incredible experiences on a budget.",
     tags: ["Budget Travel", "Destinations", "2025"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAWezyKcN98bzYhDWXrloT4ZN0twumF6ai7eOB",
     views: 2100,
     createdAt: "2024-12-10T10:00:00.000Z",
     category: "Destinations",
@@ -67,7 +68,7 @@ const dummyBlogPosts = [
     excerpt: "Important safety guidelines and best practices when meeting new travel companions. Learn how to verify profiles and trust your instincts.",
     tags: ["Safety", "Security", "Tips"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAz6lzdr3bnuIGS7AkBUre5iWcFmvTJLfDMQdO",
     views: 1750,
     createdAt: "2024-12-08T10:00:00.000Z",
     category: "Safety",
@@ -78,7 +79,7 @@ const dummyBlogPosts = [
     excerpt: "Discover off-the-beaten-path destinations that offer authentic experiences away from tourist crowds. Perfect for adventurous travelers.",
     tags: ["Southeast Asia", "Hidden Gems", "Adventure"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrA1jaPFoEpswgOmXG0ZRhuiQdfnP4ycBUEHrLv",
     views: 1450,
     createdAt: "2024-12-05T10:00:00.000Z",
     category: "Destinations",
@@ -89,7 +90,7 @@ const dummyBlogPosts = [
     excerpt: "A comprehensive guide to managing expenses when traveling with others. Learn about apps, methods, and best practices for fair cost-sharing.",
     tags: ["Budget", "Group Travel", "Finance"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrAFBYtAQ0NrnoPgsFlSUhMXAO1dbtYp6ycKja0",
     views: 1320,
     createdAt: "2024-12-03T10:00:00.000Z",
     category: "Tips & Guides",
@@ -100,7 +101,7 @@ const dummyBlogPosts = [
     excerpt: "Real stories from travelers who met their best friends on the road. Discover how shared adventures create unbreakable bonds.",
     tags: ["Community", "Friendship", "Stories"],
     isFeatured: true,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrApH6qMNlYeCl4rdcFu6XHQa2wPxT0EtnAi7bS",
     views: 1890,
     createdAt: "2024-12-01T10:00:00.000Z",
     category: "Community",
@@ -111,7 +112,7 @@ const dummyBlogPosts = [
     excerpt: "From minimalist backpackers to luxury travelers, find the perfect packing list for your travel style. Never forget the essentials again.",
     tags: ["Packing", "Essentials", "Preparation"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrApxTfozflYeCl4rdcFu6XHQa2wPxT0EtnAi7b",
     views: 1100,
     createdAt: "2024-11-28T10:00:00.000Z",
     category: "Tips & Guides",
@@ -122,7 +123,7 @@ const dummyBlogPosts = [
     excerpt: "Learn about cultural sensitivity and how to be a respectful traveler. Understanding local customs enhances your experience and builds bridges.",
     tags: ["Culture", "Etiquette", "Respect"],
     isFeatured: false,
-    thumbnailUrl: null,
+    thumbnailUrl: "https://t92h0dpqoi.ufs.sh/f/qPxPv9uegOrA8RyqfFTFMWlx4tJ9a0dvjrIHgDGphuCTwoOk",
     views: 950,
     createdAt: "2024-11-25T10:00:00.000Z",
     category: "Culture",
@@ -221,11 +222,22 @@ export default async function BlogPage({
                     >
                       {/* Thumbnail */}
                       <div className="relative h-48 sm:h-56 overflow-hidden bg-gradient-to-br from-amber-500/5 to-orange-500/5">
-                        <div className="w-full h-full flex items-center justify-center">
-                          <div className="p-4 rounded-xl bg-background/60 backdrop-blur-sm border border-white/10">
-                            <Plane className="w-12 h-12 text-amber-500/50" />
+                        {post.thumbnailUrl ? (
+                          <ImageWithSkeleton
+                            src={post.thumbnailUrl}
+                            alt={post.title}
+                            fill
+                            className="object-cover"
+                            containerClassName="w-full h-full"
+                            priority={post.isFeatured}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="p-4 rounded-xl bg-background/60 backdrop-blur-sm border border-white/10">
+                              <Plane className="w-12 h-12 text-amber-500/50" />
+                            </div>
                           </div>
-                        </div>
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                         {/* Featured Badge */}
