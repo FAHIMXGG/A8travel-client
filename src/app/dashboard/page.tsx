@@ -14,13 +14,11 @@ import {
   Calendar,
   MapPin,
   Users,
-  DollarSign,
   TrendingUp,
   CalendarCheck,
   Plane,
   Globe,
   Activity,
-  Loader2,
   ExternalLink,
   Plus,
   Eye,
@@ -332,7 +330,7 @@ export default function DashboardOverviewPage() {
         totalParticipants: hosted.reduce((sum, plan) => sum + plan.participantsCount, 0),
         upcomingTrips: upcoming.length,
       })
-    } catch (error: any) {
+    } catch {
       toast.error("Failed to load dashboard data")
     } finally {
       setLoading(false)
@@ -376,7 +374,7 @@ export default function DashboardOverviewPage() {
         activeCoupons: activeCoupons,
         totalParticipants: totalParticipants,
       })
-    } catch (error: any) {
+    } catch {
       toast.error("Failed to load admin dashboard data")
     } finally {
       setLoading(false)
@@ -757,7 +755,7 @@ export default function DashboardOverviewPage() {
                 Welcome back, {user?.name ?? "Traveler"}! 👋
               </CardTitle>
               <CardDescription className="text-base">
-                Here's your travel activity overview and what's coming up next.
+                Here&apos;s your travel activity overview and what&apos;s coming up next.
               </CardDescription>
             </div>
             <Button asChild size="lg" className="gap-2">
@@ -1079,7 +1077,7 @@ export default function DashboardOverviewPage() {
                     <Users className="h-5 w-5 text-primary" />
                     Active Joined Plans
                   </CardTitle>
-                  <CardDescription>Plans you're participating in</CardDescription>
+                  <CardDescription>Plans you&apos;re participating in</CardDescription>
                 </div>
                 <Button variant="ghost" size="sm" asChild>
                   <Link href="/dashboard/joined">
