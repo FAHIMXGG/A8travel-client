@@ -250,11 +250,11 @@ function Pagination({
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  OPEN: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20",
-  CLOSED: "bg-gray-500/10 text-gray-600 dark:text-gray-400 border-gray-500/20",
-  CANCELED: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
-  FULL: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20",
-  ENDED: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+  OPEN: "bg-black/40 dark:bg-black/50 text-green-200 dark:text-green-200 border-green-400/40 backdrop-blur-md",
+  CLOSED: "bg-black/40 dark:bg-black/50 text-gray-200 dark:text-gray-200 border-gray-400/40 backdrop-blur-md",
+  CANCELED: "bg-black/40 dark:bg-black/50 text-red-200 dark:text-red-200 border-red-400/40 backdrop-blur-md",
+  FULL: "bg-black/40 dark:bg-black/50 text-orange-200 dark:text-orange-200 border-orange-400/40 backdrop-blur-md",
+  ENDED: "bg-black/40 dark:bg-black/50 text-blue-200 dark:text-blue-200 border-blue-400/40 backdrop-blur-md",
 }
 
 const TRAVEL_TYPES: Record<string, string> = {
@@ -507,9 +507,9 @@ function TravelPlansPageContent() {
                           <ImageIcon className="h-12 w-12 text-muted-foreground/50" />
                         </div>
                       )}
-                      <div className="absolute top-2 right-2">
+                      <div className="absolute top-2 right-2 z-10">
                         <Badge
-                          className={`text-xs border ${STATUS_COLORS[plan.status] || STATUS_COLORS.CLOSED}`}
+                          className={`text-xs font-semibold border shadow-lg ${STATUS_COLORS[plan.status] || STATUS_COLORS.CLOSED}`}
                         >
                           {plan.status}
                         </Badge>
