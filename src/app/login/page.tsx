@@ -131,7 +131,7 @@ export default function LoginPage() {
         <div className="hidden sm:block absolute -top-16 -left-16 md:-top-24 md:-left-24 w-32 h-32 md:w-48 md:h-48 bg-primary/20 rounded-full blur-3xl" />
         <div className="hidden sm:block absolute -bottom-16 -right-16 md:-bottom-24 md:-right-24 w-32 h-32 md:w-48 md:h-48 bg-accent/20 rounded-full blur-3xl" />
 
-        <div className="md:-top-24 relative backdrop-blur-xl bg-white/70 dark:bg-neutral-900/70 border border-white/20 dark:border-neutral-700/50 rounded-xl sm:rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 space-y-5 sm:space-y-6">
+        <div className=" relative backdrop-blur-xl bg-white/70 dark:bg-neutral-900/70 border border-white/20 dark:border-neutral-700/50 rounded-xl sm:rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 space-y-5 sm:space-y-6">
           {/* Subtle inner glow */}
           <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-br from-white/40 to-transparent dark:from-white/5 dark:to-transparent pointer-events-none" />
 

@@ -391,7 +391,7 @@ export default function UserProfileClient() {
                       variant="outline"
                       size="icon"
                       onClick={handlePreviousImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-background/90 backdrop-blur-sm hover:bg-background shadow-lg h-12 w-12"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-transparent hover:bg-black/20 h-12 w-12"
                       aria-label="Previous image"
                     >
                       <ChevronLeft className="h-6 w-6" />
@@ -400,7 +400,7 @@ export default function UserProfileClient() {
                       variant="outline"
                       size="icon"
                       onClick={handleNextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-background/90 backdrop-blur-sm hover:bg-background shadow-lg h-12 w-12"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-transparent hover:bg-black/20 h-12 w-12"
                       aria-label="Next image"
                     >
                       <ChevronRight className="h-6 w-6" />

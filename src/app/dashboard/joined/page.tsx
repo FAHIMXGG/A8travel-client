@@ -417,9 +417,8 @@ function JoinedPageContent() {
                       onClick={() => router.push(`/travelplan/${plan.id}`)}
                     >
                       <TableCell className="p-4">
-                        <div className="font-medium max-w-[200px] truncate">{plan.title}</div>
-                        <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                          {plan.description}
+                        <div className="font-medium max-w-[220px] line-clamp-2">
+                          {plan.title}
                         </div>
                       </TableCell>
                       <TableCell className="p-4">

@@ -586,12 +586,12 @@ export default function DashboardOverviewPage() {
                       className="rounded-lg border border-border/50 bg-muted/10 p-3 hover:bg-muted/20 transition-colors cursor-pointer group"
                       onClick={() => router.push(`/travelplan/${plan.id}`)}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-sm truncate group-hover:text-primary transition-colors">
                             {plan.title}
                           </p>
-                          <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                          <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1">
                               <MapPin className="h-3 w-3" />
                               {plan.destinationCity}, {plan.destinationCountry}
@@ -602,7 +602,7 @@ export default function DashboardOverviewPage() {
                             </span>
                           </div>
                         </div>
-                        {getStatusBadge(plan.status)}
+                        <div className="sm:self-start">{getStatusBadge(plan.status)}</div>
                       </div>
                     </div>
                   ))}
@@ -710,12 +710,12 @@ export default function DashboardOverviewPage() {
                     className="rounded-lg border border-border/50 bg-muted/10 p-3 hover:bg-muted/20 transition-colors cursor-pointer group"
                     onClick={() => router.push(`/users/${adminUser.id}`)}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm truncate group-hover:text-primary transition-colors">
                           {adminUser.name}
                         </p>
-                        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <Mail className="h-3 w-3" />
                             {adminUser.email}
@@ -725,7 +725,7 @@ export default function DashboardOverviewPage() {
                           </Badge>
                         </div>
                       </div>
-                      <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors sm:self-start" />
                     </div>
                   </div>
                 ))}
@@ -1094,12 +1094,12 @@ export default function DashboardOverviewPage() {
                       className="rounded-lg border border-border/50 bg-muted/10 p-3 hover:bg-muted/20 transition-colors cursor-pointer group"
                       onClick={() => router.push(`/travelplan/${plan.id}`)}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-sm truncate group-hover:text-primary transition-colors">
                             {plan.title}
                           </p>
-                          <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                          <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1">
                               <MapPin className="h-3 w-3" />
                               {plan.destinationCity}
@@ -1110,7 +1110,7 @@ export default function DashboardOverviewPage() {
                             </span>
                           </div>
                         </div>
-                        {getStatusBadge(plan.status)}
+                        <div className="sm:self-start">{getStatusBadge(plan.status)}</div>
                       </div>
                     </div>
                   ))}
