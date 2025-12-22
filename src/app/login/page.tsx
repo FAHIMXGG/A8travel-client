@@ -27,6 +27,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -236,6 +237,36 @@ export default function LoginPage() {
               >
                 Sign up
               </a>
+            </div>
+
+            <div className="space-y-2 pt-4 border-t border-neutral-200/50 dark:border-neutral-700/50">
+              <p className="text-xs text-center text-muted-foreground mb-3">
+                Demo Credentials
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setValue("email", "tests@gmail.com");
+                    setValue("password", "test@gmail");
+                  }}
+                  className="flex-1 text-xs sm:text-sm h-9 sm:h-10"
+                >
+                  Log in as Admin
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setValue("email", "a1@example.com");
+                    setValue("password", "password123");
+                  }}
+                  className="flex-1 text-xs sm:text-sm h-9 sm:h-10"
+                >
+                  Log in as User
+                </Button>
+              </div>
             </div>
           </div>
         </div>
