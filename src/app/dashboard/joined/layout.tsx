@@ -17,3 +17,4 @@ export default function JoinedLayout({
   return <>{children}</>;
 }
 
+
