@@ -182,6 +182,8 @@ export default function TravelPlanDetailClient() {
   const [editingReviewId, setEditingReviewId] = useState<string | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
+  const [relatedPlans, setRelatedPlans] = useState<TravelPlan[]>([])
+  const [loadingRelated, setLoadingRelated] = useState(false)
 
   const planId = params?.id as string
   const userId = session?.user?.id
@@ -198,6 +200,13 @@ export default function TravelPlanDetailClient() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planId])
+
+  useEffect(() => {
+    if (plan?.tags && plan.tags.length > 0) {
+      loadRelatedPlans()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plan?.tags, planId])
 
   useEffect(() => {
     if (plan?.images && plan.images.length > 0) {
@@ -259,6 +268,31 @@ export default function TravelPlanDetailClient() {
       setError(err.message || "Failed to load travel plan")
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadRelatedPlans = async () => {
+    if (!plan?.tags || plan.tags.length === 0) return
+
+    try {
+      setLoadingRelated(true)
+      const tagsParam = plan.tags.join(",")
+      const res = await fetch(`/api/travel-plans/match?tags=${encodeURIComponent(tagsParam)}&limit=4`)
+      const data = await res.json()
+
+      if (res.ok) {
+        const plansData = data?.data?.data || data?.data || []
+        // Filter out the current plan and limit to 3
+        const filtered = plansData
+          .filter((p: TravelPlan) => (p.id || p._id) !== planId)
+          .slice(0, 3)
+        setRelatedPlans(filtered)
+      }
+    } catch (err: any) {
+      // Silently fail for related plans
+      console.error("Failed to load related plans:", err)
+    } finally {
+      setLoadingRelated(false)
     }
   }
 
@@ -955,6 +989,186 @@ export default function TravelPlanDetailClient() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Related Travel Plans */}
+      {relatedPlans.length > 0 && (
+        <div className="space-y-4 pt-6 border-t border-border/50">
+          <h2 className="text-2xl font-semibold flex items-center gap-2">
+            <Tag className="h-6 w-6 text-primary" />
+            Related Travel Plans
+          </h2>
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            {relatedPlans.map((relatedPlan) => {
+              const relatedPlanId = relatedPlan.id || relatedPlan._id || ""
+              const firstImage = relatedPlan.images && relatedPlan.images.length > 0 ? relatedPlan.images[0] : null
+              const budgetRange =
+                relatedPlan.budgetMin && relatedPlan.budgetMax
+                  ? `$${relatedPlan.budgetMin} - $${relatedPlan.budgetMax}`
+                  : relatedPlan.budgetMin
+                    ? `From $${relatedPlan.budgetMin}`
+                    : relatedPlan.budgetMax
+                      ? `Up to $${relatedPlan.budgetMax}`
+                      : "Budget not specified"
+
+              return (
+                <Link
+                  key={relatedPlanId}
+                  href={`/travelplan/${relatedPlanId}`}
+                  className="group block h-full rounded-xl border border-border/50 bg-card/30 backdrop-blur-md hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                >
+                  {/* Image */}
+                  <div className="aspect-video relative bg-gradient-to-br from-primary/10 to-amber-500/10 overflow-hidden">
+                    {firstImage ? (
+                      <Image
+                        src={firstImage}
+                        alt={relatedPlan.title}
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                        unoptimized={isUnoptimizedCdn(firstImage)}
+                      />
+                    ) : (
+                      <div className="absolute inset-0 grid place-items-center">
+                        <ImageIcon className="h-12 w-12 text-muted-foreground/50" />
+                      </div>
+                    )}
+                    <div className="absolute top-2 right-2">
+                      <Badge
+                        className={`text-xs border ${STATUS_COLORS[relatedPlan.status] || STATUS_COLORS.CLOSED}`}
+                      >
+                        {relatedPlan.status}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4 sm:p-5 space-y-3">
+                    <div>
+                      <h3 className="font-semibold text-base sm:text-lg line-clamp-2 group-hover:text-primary transition-colors">
+                        {relatedPlan.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {TRAVEL_TYPES[relatedPlan.travelType] || relatedPlan.travelType}
+                      </p>
+                    </div>
+
+                    <div className="space-y-2 text-xs sm:text-sm">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+                        <span className="line-clamp-1">
+                          {relatedPlan.destinationCity}, {relatedPlan.destinationCountry}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Calendar className="h-3.5 w-3.5 flex-shrink-0" />
+                        <span>
+                          {formatDateShort(relatedPlan.startDate)} - {formatDateShort(relatedPlan.endDate)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Users className="h-3.5 w-3.5 flex-shrink-0" />
+                        <span>
+                          {relatedPlan.participantsCount}
+                          {relatedPlan.maxParticipants ? ` / ${relatedPlan.maxParticipants}` : ""} participants
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <DollarSign className="h-3.5 w-3.5 flex-shrink-0" />
+                        <span>{budgetRange}</span>
+                      </div>
+                    </div>
+
+                    {/* Tags */}
+                    {relatedPlan.tags && relatedPlan.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pt-2 border-t border-border/30">
+                        {relatedPlan.tags.slice(0, 3).map((tag, i) => (
+                          <Badge
+                            key={i}
+                            variant="secondary"
+                            className="text-[10px] px-1.5 py-0.5"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                        {relatedPlan.tags.length > 3 && (
+                          <Badge variant="outline" className="text-[10px] px-1.5 py-0.5">
+                            +{relatedPlan.tags.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Host Info */}
+                    {relatedPlan.hostName && relatedPlan.hostId && (
+                      <div
+                        className="flex items-center gap-2 pt-2 border-t border-border/30 cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          e.preventDefault()
+                          router.push(`/users/${relatedPlan.hostId}`)
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          {relatedPlan.hostImage ? (
+                            <Image
+                              src={relatedPlan.hostImage}
+                              alt={relatedPlan.hostName}
+                              width={24}
+                              height={24}
+                              className="rounded-full"
+                            />
+                          ) : (
+                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                              <User className="h-3.5 w-3.5 text-primary" />
+                            </div>
+                          )}
+                          <span className="text-xs text-muted-foreground hover:text-primary transition-colors">
+                            {relatedPlan.hostName}
+                          </span>
+                        </div>
+                        {relatedPlan.hostRatingAverage !== undefined && relatedPlan.hostRatingAverage > 0 && (
+                          <div className="flex items-center gap-1 ml-auto">
+                            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                            <span className="text-xs text-muted-foreground">
+                              {relatedPlan.hostRatingAverage.toFixed(1)}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {loadingRelated && relatedPlans.length === 0 && plan?.tags && plan.tags.length > 0 && (
+        <div className="space-y-4 pt-6 border-t border-border/50">
+          <h2 className="text-2xl font-semibold flex items-center gap-2">
+            <Tag className="h-6 w-6 text-primary" />
+            Related Travel Plans
+          </h2>
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="border-border/50 bg-card/30 backdrop-blur-md">
+                <Skeleton className="aspect-video w-full rounded-t-xl" />
+                <CardContent className="p-4 sm:p-5 space-y-3">
+                  <Skeleton className="h-6 w-full" />
+                  <Skeleton className="h-4 w-2/3" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
