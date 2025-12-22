@@ -115,7 +115,7 @@ async function getLatestTravelPlans() {
 async function getPopularTravellers() {
   try {
     const baseUrl = await getBaseUrl();
-    const res = await fetch(`${baseUrl}/api/users/popular?limit=20`, {
+    const res = await fetch(`${baseUrl}/api/users/popular?limit=6`, {
       next: { revalidate: 60 },
     });
     
@@ -128,9 +128,9 @@ async function getPopularTravellers() {
       console.error("API returned error:", data.message);
       return [];
     }
-    const users = data.data?.data || [];
-    // Users are already sorted by the API, but we'll take top 6
-    return users.slice(0, 6);
+    const users = Array.isArray(data.data) ? data.data : [];
+    // Users are already sorted and limited by the backend popular endpoint
+    return users;
   } catch (error) {
     console.error("Failed to fetch popular travellers:", error);
     return [];

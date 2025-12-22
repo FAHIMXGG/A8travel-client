@@ -48,36 +48,27 @@ export const loginSchema = z.object({
 });
 
 export const profileUpdateSchema = z.object({
+  // Full name is required
   name: z
     .string()
-    .optional()
-    .refine(
-      (val) => {
-        if (!val || val.trim() === "") return true; // Allow empty for optional field
-        return val.length >= 2;
-      },
-      {
-        message: "Name must be at least 2 characters",
-      }
-    )
-    .refine(
-      (val) => {
-        if (!val || val.trim() === "") return true;
-        return val.length <= 100;
-      },
-      {
-        message: "Name must be less than 100 characters",
-      }
-    ),
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name must be less than 100 characters"),
+  // Phone is required and must be a valid international number
   phone: z
     .string()
-    .nullish()
+    .min(1, "Phone number is required")
     .superRefine((val, ctx) => {
-      if (!val || val.trim() === "") return; // Allow empty/null
-      
+      if (!val || val.trim() === "") {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Phone number is required",
+        });
+        return;
+      }
+
       // Remove common formatting
       const cleaned = val.replace(/[\s\-\(\)]/g, "");
-      
+
       // E.164 format: +[country code][number] (7-15 digits after +)
       const phoneRegex = /^\+[1-9]\d{6,14}$/;
       if (!phoneRegex.test(cleaned)) {
@@ -105,20 +96,11 @@ export const profileUpdateSchema = z.object({
         message: "Image must be a valid URL",
       }
     ),
+  // Bio is required with a reasonable max length
   bio: z
     .string()
-    .nullable()
-    .optional()
-    .refine(
-      (val) => {
-        if (!val) return true; // Allow null/empty
-        if (val.length > 1000) return false;
-        return true;
-      },
-      {
-        message: "Bio must be less than 1000 characters",
-      }
-    ),
+    .min(1, "Bio is required")
+    .max(1000, "Bio must be less than 1000 characters"),
   travelInterests: z.array(z.string()).optional(),
   visitedCountries: z.array(z.string()).optional(),
   currentLocation: z.string().min(1, "Current location is required"),

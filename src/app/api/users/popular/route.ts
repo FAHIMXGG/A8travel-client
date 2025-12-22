@@ -4,13 +4,13 @@ import { authOptions } from "@/app/lib/auth-options"
 
 const BACKEND_URL = process.env.BACKEND_URL || "https://a8travel-backend.vercel.app"
 
-// Public endpoint to get popular users (sorted by rating)
+// Public endpoint to get popular users from backend `/users/popular`
 // Uses auth if available, but tries without if not authenticated
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
     const page = searchParams.get("page") || "1"
-    const limit = searchParams.get("limit") || "20"
+    const limit = searchParams.get("limit") || "6"
 
     // Build query string
     const queryParams = new URLSearchParams()
@@ -21,8 +21,8 @@ export async function GET(req: NextRequest) {
     const session = await getServerSession(authOptions)
     const token = session ? (session as any).accessToken : null
 
-    // Call backend with optional auth
-    const res = await fetch(`${BACKEND_URL}/api/users/all?${queryParams.toString()}`, {
+    // Call backend popular-users endpoint with optional auth
+    const res = await fetch(`${BACKEND_URL}/api/users/popular?${queryParams.toString()}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -38,17 +38,7 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    // Sort by ratingAverage first, then ratingCount
-    if (data.success && data.data?.data) {
-      const users = data.data.data
-      users.sort((a: any, b: any) => {
-        if (b.ratingAverage !== a.ratingAverage) {
-          return b.ratingAverage - a.ratingAverage
-        }
-        return b.ratingCount - a.ratingCount
-      })
-    }
-
+    // Pass through backend response (already limited/sorted)
     return NextResponse.json(data)
   } catch (e: any) {
     return NextResponse.json({ success: false, message: e.message || "Network error" }, { status: 500 })

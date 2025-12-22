@@ -60,9 +60,9 @@ export default function ProfilePage() {
     resolver: zodResolver(profileUpdateSchema),
     defaultValues: {
       name: "",
-      phone: null,
+      phone: "",
       image: null,
-      bio: null,
+      bio: "",
       travelInterests: [],
       visitedCountries: [],
       currentLocation: "",
@@ -91,9 +91,9 @@ export default function ProfilePage() {
             // Set form values - ensure arrays are always arrays
             reset({
               name: profileData.name || "",
-              phone: profileData.phone || null,
+              phone: profileData.phone || "",
               image: profileData.image || null,
-              bio: profileData.bio || null,
+              bio: profileData.bio || "",
               travelInterests: Array.isArray(profileData.travelInterests) ? profileData.travelInterests : [],
               visitedCountries: Array.isArray(profileData.visitedCountries) ? profileData.visitedCountries : [],
               currentLocation: profileData.currentLocation || "",
@@ -221,9 +221,9 @@ export default function ProfilePage() {
         // Reset form with updated data
         reset({
           name: updatedProfile.name || "",
-          phone: updatedProfile.phone || null,
+          phone: updatedProfile.phone || "",
           image: updatedProfile.image || null,
-          bio: updatedProfile.bio || null,
+          bio: updatedProfile.bio || "",
           travelInterests: Array.isArray(updatedProfile.travelInterests) ? updatedProfile.travelInterests : [],
           visitedCountries: Array.isArray(updatedProfile.visitedCountries) ? updatedProfile.visitedCountries : [],
           currentLocation: updatedProfile.currentLocation || "",
@@ -296,7 +296,7 @@ export default function ProfilePage() {
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2" ref={getErrorRef("name")}>
                   <Label htmlFor="name" className="text-sm font-medium">
-                    Full Name
+                    Full Name <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="name"
@@ -334,7 +334,7 @@ export default function ProfilePage() {
 
                 <div className="space-y-2" ref={getErrorRef("phone")}>
                   <Label htmlFor="phone" className="text-sm font-medium">
-                    Phone Number
+                    Phone Number <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="phone"
@@ -413,7 +413,7 @@ export default function ProfilePage() {
               </h3>
               <div className="space-y-2">
                 <Label htmlFor="bio" className="text-sm font-medium">
-                  Bio
+                  Bio <span className="text-destructive">*</span>
                 </Label>
                 <textarea
                   id="bio"
