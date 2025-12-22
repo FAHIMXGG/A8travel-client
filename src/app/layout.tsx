@@ -41,6 +41,11 @@ export const metadata: Metadata = {
   description: "Connect with like-minded travelers, join group trips, and explore the world together. Find travel buddies, create travel plans, and share amazing adventures.",
   keywords: ["travel buddy", "travel companion", "group travel", "travel plans", "find travelers", "travel community"],
   authors: [{ name: "TravelBuddy" }],
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
