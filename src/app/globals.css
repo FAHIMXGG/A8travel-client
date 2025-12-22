@@ -134,4 +134,17 @@
   .font-accent {
     font-family: var(--font-accent), ui-serif, serif;
   }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  /* Strong blur for gallery modal overlay */
+  [data-slot="dialog-overlay"] {
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    background-color: rgba(0, 0, 0, 0.7) !important;
+  }
 }

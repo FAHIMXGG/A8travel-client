@@ -25,12 +25,15 @@ import {
   Trash2,
   Edit2,
   Send,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import toast from "react-hot-toast"
+import { isUnoptimizedCdn } from "@/lib/is-unoptimized-cdn"
 import {
   Dialog,
   DialogContent,
@@ -39,6 +42,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { VisuallyHidden } from "@/components/ui/visually-hidden"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -176,6 +180,8 @@ export default function TravelPlanDetailClient() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [reviewToDelete, setReviewToDelete] = useState<string | null>(null)
   const [editingReviewId, setEditingReviewId] = useState<string | null>(null)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false)
 
   const planId = params?.id as string
   const userId = session?.user?.id
@@ -192,6 +198,49 @@ export default function TravelPlanDetailClient() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planId])
+
+  useEffect(() => {
+    if (plan?.images && plan.images.length > 0) {
+      setCurrentImageIndex(0)
+    }
+  }, [plan?.images])
+
+  const handlePreviousImage = () => {
+    if (!plan?.images || plan.images.length === 0) return
+    const images = plan.images
+    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+  }
+
+  const handleNextImage = () => {
+    if (!plan?.images || plan.images.length === 0) return
+    const images = plan.images
+    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+  }
+
+  const handleOpenGallery = (index: number) => {
+    setCurrentImageIndex(index)
+    setIsGalleryOpen(true)
+  }
+
+  useEffect(() => {
+    if (!isGalleryOpen) return
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault()
+        handlePreviousImage()
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault()
+        handleNextImage()
+      } else if (e.key === "Escape") {
+        setIsGalleryOpen(false)
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyPress)
+    return () => window.removeEventListener("keydown", handleKeyPress)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isGalleryOpen, plan?.images])
 
   const loadPlan = async () => {
     try {
@@ -412,29 +461,147 @@ export default function TravelPlanDetailClient() {
         </CardHeader>
 
         <CardContent className="relative space-y-6">
-          {/* Images */}
+          {/* Images Gallery */}
           {plan.images && plan.images.length > 0 && (
-            <div className="space-y-2">
+            <div className="space-y-4">
               <h3 className="text-lg font-semibold flex items-center gap-2">
                 <ImageIcon className="h-5 w-5 text-primary" />
-                Images
+                Images ({plan.images.length})
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {plan.images.map((image, idx) => (
-                  <div key={idx} className="relative aspect-video rounded-lg overflow-hidden border border-border/50">
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleOpenGallery(idx)}
+                    className="relative aspect-video rounded-lg overflow-hidden border border-border/50 hover:border-primary/50 transition-all hover:scale-[1.02] cursor-pointer group"
+                  >
                     <Image
                       src={image}
                       alt={`${plan.title} - Image ${idx + 1}`}
                       fill
                       sizes="(min-width: 768px) 33vw, 50vw"
-                      className="object-cover"
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
                       loading="lazy"
                     />
-                  </div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                  </button>
                 ))}
               </div>
             </div>
           )}
+
+          {/* Gallery Modal */}
+          <Dialog open={isGalleryOpen} onOpenChange={setIsGalleryOpen}>
+            {isGalleryOpen && (
+              <div 
+                className="fixed inset-0 z-[49] backdrop-blur-xl bg-black/70"
+                onClick={() => setIsGalleryOpen(false)}
+                aria-hidden="true"
+              />
+            )}
+            <DialogContent className="!max-w-[80vw] w-[80vw] h-[80vh] max-h-[80vh] p-0 gap-0 bg-background border shadow-2xl z-[52]">
+              <VisuallyHidden>
+                <DialogTitle>Image Gallery - {plan.title}</DialogTitle>
+              </VisuallyHidden>
+              <div className="relative w-full h-full flex items-center justify-center p-4">
+                {/* Main Image Container - fixed size for all images */}
+                <div className="relative w-full h-full flex items-center justify-center">
+                  {plan.images && plan.images[currentImageIndex] && (
+                    <div className="relative w-full h-full flex items-center justify-center">
+                      <Image
+                        src={plan.images[currentImageIndex]}
+                        alt={`${plan.title} - Image ${currentImageIndex + 1}`}
+                        fill
+                        sizes="(max-width: 80vw) 80vw, 80vw"
+                        className="object-contain"
+                        priority={currentImageIndex === 0}
+                        unoptimized={isUnoptimizedCdn(plan.images[currentImageIndex])}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Navigation Buttons - fixed to container edges */}
+                {plan.images && plan.images.length > 1 && (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={handlePreviousImage}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-background/90 backdrop-blur-sm hover:bg-background shadow-lg h-12 w-12"
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={handleNextImage}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-background/90 backdrop-blur-sm hover:bg-background shadow-lg h-12 w-12"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </Button>
+                  </>
+                )}
+
+                {/* Image Counter */}
+                {plan.images && plan.images.length > 1 && (
+                  <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-background/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+                    {currentImageIndex + 1} / {plan.images.length}
+                  </div>
+                )}
+
+                {/* Image Indicators */}
+                {plan.images && plan.images.length > 1 && (
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2 bg-background/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">
+                    {plan.images.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setCurrentImageIndex(idx)}
+                        className={`h-2 rounded-full transition-all ${
+                          idx === currentImageIndex
+                            ? "w-8 bg-primary"
+                            : "w-2 bg-muted-foreground/60 hover:bg-muted-foreground/80"
+                        }`}
+                        aria-label={`Go to image ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Thumbnail Navigation */}
+                {plan.images && plan.images.length > 1 && (
+                  <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex gap-2 overflow-x-auto pb-2 scrollbar-hide max-w-[90%] bg-background/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-lg">
+                    {plan.images.map((image, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setCurrentImageIndex(idx)}
+                        className={`relative flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all ${
+                          idx === currentImageIndex
+                            ? "border-primary ring-2 ring-primary/20"
+                            : "border-border/50 hover:border-primary/50"
+                        }`}
+                        aria-label={`View image ${idx + 1}`}
+                      >
+                        <Image
+                          src={image}
+                          alt={`Thumbnail ${idx + 1}`}
+                          fill
+                          sizes="64px"
+                          className="object-cover"
+                          loading="lazy"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
 
           {/* Description */}
           <div className="space-y-2">

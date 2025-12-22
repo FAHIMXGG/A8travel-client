@@ -14,12 +14,21 @@ import {
   Plane,
   Crown,
   Phone,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { VisuallyHidden } from "@/components/ui/visually-hidden"
+import { isUnoptimizedCdn } from "@/lib/is-unoptimized-cdn"
 
 type UserProfile = {
   id: string
@@ -70,6 +79,8 @@ export default function UserProfileClient() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false)
 
   const userId = params?.id as string
 
@@ -79,6 +90,49 @@ export default function UserProfileClient() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
+
+  useEffect(() => {
+    if (profile?.gallery && profile.gallery.length > 0) {
+      setCurrentImageIndex(0)
+    }
+  }, [profile?.gallery])
+
+  const handlePreviousImage = () => {
+    if (!profile?.gallery || profile.gallery.length === 0) return
+    const gallery = profile.gallery
+    setCurrentImageIndex((prev) => (prev === 0 ? gallery.length - 1 : prev - 1))
+  }
+
+  const handleNextImage = () => {
+    if (!profile?.gallery || profile.gallery.length === 0) return
+    const gallery = profile.gallery
+    setCurrentImageIndex((prev) => (prev === gallery.length - 1 ? 0 : prev + 1))
+  }
+
+  const handleOpenGallery = (index: number) => {
+    setCurrentImageIndex(index)
+    setIsGalleryOpen(true)
+  }
+
+  useEffect(() => {
+    if (!isGalleryOpen) return
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault()
+        handlePreviousImage()
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault()
+        handleNextImage()
+      } else if (e.key === "Escape") {
+        setIsGalleryOpen(false)
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyPress)
+    return () => window.removeEventListener("keydown", handleKeyPress)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isGalleryOpen, profile?.gallery])
 
   const loadProfile = async () => {
     try {
@@ -270,31 +324,147 @@ export default function UserProfileClient() {
 
           {/* Gallery */}
           {profile.gallery && profile.gallery.length > 0 && (
-            <div className="space-y-2">
+            <div className="space-y-4">
               <h3 className="text-lg font-semibold flex items-center gap-2">
                 <Images className="h-5 w-5 text-primary" />
                 Gallery ({profile.gallery.length})
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {profile.gallery.map((image, idx) => (
-                  <div
+                  <button
                     key={idx}
-                    className="relative aspect-square rounded-lg overflow-hidden border border-border/50 group cursor-pointer"
+                    type="button"
+                    onClick={() => handleOpenGallery(idx)}
+                    className="relative aspect-square rounded-lg overflow-hidden border border-border/50 hover:border-primary/50 transition-all hover:scale-[1.02] cursor-pointer group"
                   >
                     <Image
                       src={image}
                       alt={`${profile.name} - Gallery ${idx + 1}`}
                       fill
                       sizes="(min-width: 768px) 25vw, (min-width: 640px) 33vw, 50vw"
-                      className="object-cover transition-transform duration-300 group-hover:scale-110"
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
                       loading="lazy"
+                      unoptimized={isUnoptimizedCdn(image)}
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                  </div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                  </button>
                 ))}
               </div>
             </div>
           )}
+
+          {/* Gallery Modal */}
+          <Dialog open={isGalleryOpen} onOpenChange={setIsGalleryOpen}>
+            {isGalleryOpen && (
+              <div 
+                className="fixed inset-0 z-[49] backdrop-blur-xl bg-black/70"
+                onClick={() => setIsGalleryOpen(false)}
+                aria-hidden="true"
+              />
+            )}
+            <DialogContent className="!max-w-[80vw] w-[80vw] h-[80vh] max-h-[80vh] p-0 gap-0 bg-background border shadow-2xl z-[52]">
+              <VisuallyHidden>
+                <DialogTitle>Image Gallery - {profile.name}</DialogTitle>
+              </VisuallyHidden>
+              <div className="relative w-full h-full flex items-center justify-center p-4">
+                {/* Main Image Container - fixed size for all images */}
+                <div className="relative w-full h-full flex items-center justify-center">
+                  {profile.gallery && profile.gallery[currentImageIndex] && (
+                    <div className="relative w-full h-full flex items-center justify-center">
+                      <Image
+                        src={profile.gallery[currentImageIndex]}
+                        alt={`${profile.name} - Gallery ${currentImageIndex + 1}`}
+                        fill
+                        sizes="(max-width: 80vw) 80vw, 80vw"
+                        className="object-contain"
+                        priority={currentImageIndex === 0}
+                        unoptimized={isUnoptimizedCdn(profile.gallery[currentImageIndex])}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Navigation Buttons - fixed to container edges */}
+                {profile.gallery && profile.gallery.length > 1 && (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={handlePreviousImage}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-background/90 backdrop-blur-sm hover:bg-background shadow-lg h-12 w-12"
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={handleNextImage}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-background/90 backdrop-blur-sm hover:bg-background shadow-lg h-12 w-12"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </Button>
+                  </>
+                )}
+
+                {/* Image Counter */}
+                {profile.gallery && profile.gallery.length > 1 && (
+                  <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-background/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+                    {currentImageIndex + 1} / {profile.gallery.length}
+                  </div>
+                )}
+
+                {/* Image Indicators */}
+                {profile.gallery && profile.gallery.length > 1 && (
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2 bg-background/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">
+                    {profile.gallery.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setCurrentImageIndex(idx)}
+                        className={`h-2 rounded-full transition-all ${
+                          idx === currentImageIndex
+                            ? "w-8 bg-primary"
+                            : "w-2 bg-muted-foreground/60 hover:bg-muted-foreground/80"
+                        }`}
+                        aria-label={`Go to image ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Thumbnail Navigation */}
+                {profile.gallery && profile.gallery.length > 1 && (
+                  <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex gap-2 overflow-x-auto pb-2 scrollbar-hide max-w-[90%] bg-background/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-lg">
+                    {profile.gallery.map((image, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setCurrentImageIndex(idx)}
+                        className={`relative flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all ${
+                          idx === currentImageIndex
+                            ? "border-primary ring-2 ring-primary/20"
+                            : "border-border/50 hover:border-primary/50"
+                        }`}
+                        aria-label={`View image ${idx + 1}`}
+                      >
+                        <Image
+                          src={image}
+                          alt={`Thumbnail ${idx + 1}`}
+                          fill
+                          sizes="64px"
+                          className="object-cover"
+                          loading="lazy"
+                          unoptimized={isUnoptimizedCdn(image)}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
 
           {/* Additional Info */}
           <div className="pt-4 border-t border-border/50 space-y-2 text-xs text-muted-foreground">
